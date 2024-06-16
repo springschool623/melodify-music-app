@@ -1,7 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/components/botnav.dart';
 import 'package:melodify_app_project/components/grid_recent.dart';
+import 'package:melodify_app_project/components/list_fav_artist.dart';
+import 'package:melodify_app_project/pages/find_page.dart';
+import 'package:melodify_app_project/pages/home_page.dart';
+import 'package:melodify_app_project/pages/library_page.dart';
+import 'package:melodify_app_project/pages/personal_page.dart';
+import 'package:melodify_app_project/pages/premium_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -11,10 +18,28 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  //Kiểm soát botnav
+  int _selectedIndex = 0;
+
+  //Update các pages khi nhấn chọn
+  void navigattionBar(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  //Display Page
+  final List<Widget> _pages = [
+    const HomePage(),
+    const SearchPage(),
+    const PremiumPage(),
+    const LibraryPage(),
+    const PersonnalPage()
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       body: Stack(
         children: [
           Container(
@@ -29,82 +54,42 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
-            child: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  pinned: true,
-                  backgroundColor: Colors.transparent,
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Welcome back!',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'MonFontsBold',
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 3),
-                      Text(
-                        'ZeBao',
-                        style: TextStyle(
-                          fontFamily: 'MonFontsBold',
-                          fontSize: 14,
-                          color: Color.fromRGBO(165, 165, 165, 1),
-                        ),
-                      ),
-                    ],
-                  ),
-                  titleSpacing: 15,
-                  leading: const Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/images/logotest.jpg'),
-                    ),
-                  ),
-                  actions: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.notifications, color: Colors.white),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.settings, color: Colors.white),
-                    ),
-                  ],
+          // Hiển thị trang được chọn
+          _pages[_selectedIndex],
+          // Đặt BottomNavigationBar ở dưới cùng của màn hình
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.black.withOpacity(0.8), // Đặt màu nền với độ mờ
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined),
+                  label: 'Trang chủ',
+                  activeIcon: Icon(Icons.home),
                 ),
-                SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: 20,),
-                      Text(
-                        'Gần đây',
-                        style: TextStyle(
-                          fontFamily: 'MonFontsBold',
-                          color: Colors.white,
-                          fontSize: 22
-                        ),
-                      ),
-                      const SizedBox(height: 8,),
-                      RecentPlayListGridView(),
-                      const SizedBox(height: 30,),
-                      Text(
-                        'Nghệ sĩ yêu thích của bạn',
-                        style: TextStyle(
-                          fontFamily: 'MonFontsBold',
-                          color: Colors.white,
-                          fontSize: 22
-                        ),
-                      ),
-                    ],
-                  ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search_outlined),
+                  label: 'Tìm kiếm',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.my_library_music_outlined),
+                  label: 'Thư viện',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.paid_outlined),
+                  label: 'Premium',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person_outline),
+                  label: 'Cá nhân',
                 ),
               ],
+              unselectedItemColor: Colors.white54,
+              selectedItemColor: Colors.white,
+              onTap: (index) => navigattionBar(index),
             ),
           ),
         ],

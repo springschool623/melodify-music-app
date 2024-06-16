@@ -23,11 +23,11 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
   @override
   Widget build(BuildContext context) {
     // Calculate the total height based on the number of items and the estimated height of each GridTile
-    final double totalHeight = (items.length * 21.8) +
+    final double totalHeight = (items.length * 22) +
         ((items.length - 1) *
             15); // 60 is the height of each GridTile, 15 is the mainAxisSpacing
 
-    return SizedBox(
+    return Container(
       height: totalHeight,
       child: GridView.builder(
           padding: EdgeInsets.zero,
