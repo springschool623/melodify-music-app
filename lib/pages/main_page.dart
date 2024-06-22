@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:melodify_app_project/components/botnav.dart';
 import 'package:melodify_app_project/components/grid_recent.dart';
 import 'package:melodify_app_project/components/list_fav_artist.dart';
+import 'package:melodify_app_project/components/playing_bar.dart';
 import 'package:melodify_app_project/pages/find_page.dart';
 import 'package:melodify_app_project/pages/home_page.dart';
 import 'package:melodify_app_project/pages/library_page.dart';
@@ -61,35 +62,40 @@ class _MainPageState extends State<MainPage> {
             bottom: 0,
             left: 0,
             right: 0,
-            child: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.black.withOpacity(0.8), // Đặt màu nền với độ mờ
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
-                  label: 'Trang chủ',
-                  activeIcon: Icon(Icons.home),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.search_outlined),
-                  label: 'Tìm kiếm',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.my_library_music_outlined),
-                  label: 'Thư viện',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.paid_outlined),
-                  label: 'Premium',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline),
-                  label: 'Cá nhân',
+            child: Column(
+              children: [
+                PlayingBar(duration: 20),
+                BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  backgroundColor: Colors.black.withOpacity(0.8), // Đặt màu nền với độ mờ
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home_outlined),
+                      label: 'Trang chủ',
+                      activeIcon: Icon(Icons.home),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.search_outlined),
+                      label: 'Tìm kiếm',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.my_library_music_outlined),
+                      label: 'Thư viện',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.paid_outlined),
+                      label: 'Premium',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person_outline),
+                      label: 'Cá nhân',
+                    ),
+                  ],
+                  unselectedItemColor: Colors.white54,
+                  selectedItemColor: Colors.white,
+                  onTap: (index) => navigattionBar(index),
                 ),
               ],
-              unselectedItemColor: Colors.white54,
-              selectedItemColor: Colors.white,
-              onTap: (index) => navigattionBar(index),
             ),
           ),
         ],
