@@ -6,6 +6,8 @@ import 'package:melodify_app_project/components/list_collection_artist.dart';
 import 'package:melodify_app_project/components/list_fav_artist.dart';
 import 'package:melodify_app_project/components/list_for_you.dart';
 import 'package:melodify_app_project/components/list_recent_play.dart';
+import 'package:melodify_app_project/stuff/color.dart';
+import 'package:melodify_app_project/stuff/same_using.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,14 +20,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: transparent,
       extendBodyBehindAppBar: true,
       body: CustomScrollView(
         slivers: [
           SliverPadding(
             padding: const EdgeInsets.only(top: 25, left: 16, right: 16),
             sliver: SliverAppBar(
-              backgroundColor: Colors.transparent,
+              backgroundColor: transparent,
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -35,7 +37,7 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: 'RobotoBoldFont',
-                      color: Colors.white,
+                      color: whiteColor,
                     ),
                   ),
                   SizedBox(height: 3),
@@ -44,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(
                       fontFamily: 'RobotoBoldFont',
                       fontSize: 14,
-                      color: Color.fromRGBO(165, 165, 165, 1),
+                      color: lightGrayColor,
                     ),
                   ),
                 ],
@@ -59,11 +61,11 @@ class _HomePageState extends State<HomePage> {
               actions: [
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.notifications, color: Colors.white),
+                  icon: Icon(Icons.notifications, color: whiteColor),
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.settings, color: Colors.white),
+                  icon: Icon(Icons.settings, color: whiteColor),
                 ),
               ],
             ),
@@ -79,10 +81,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(left: 16),
                   child: Text(
                     'Gần đây',
-                    style: TextStyle(
-                        fontFamily: 'RobotoBoldFont',
-                        color: Colors.white,
-                        fontSize: 22),
+                    style: changeTextColor(robotoBold22, whiteColor),
                   ),
                 ),
 
@@ -102,10 +101,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: Text(
                     'Nghệ sĩ yêu thích của bạn',
-                    style: TextStyle(
-                        fontFamily: 'RobotoBoldFont',
-                        color: Colors.white,
-                        fontSize: 22),
+                    style: changeTextColor(robotoBold22, whiteColor),
                   ),
                 ),
 
@@ -125,10 +121,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: Text(
                     'Mới phát gần đây',
-                    style: TextStyle(
-                        fontFamily: 'RobotoBoldFont',
-                        color: Colors.white,
-                        fontSize: 22),
+                    style: changeTextColor(robotoBold22, whiteColor),
                   ),
                 ),
 
@@ -148,10 +141,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: Text(
                     'Dành cho bạn',
-                    style: TextStyle(
-                        fontFamily: 'RobotoBoldFont',
-                        color: Colors.white,
-                        fontSize: 22),
+                    style: changeTextColor(robotoBold22, whiteColor),
                   ),
                 ),
 
@@ -171,10 +161,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: Text(
                     'Tuyển tập nhạc hay nhất của các nghệ sĩ',
-                    style: TextStyle(
-                        fontFamily: 'RobotoBoldFont',
-                        color: Colors.white,
-                        fontSize: 22),
+                    style: changeTextColor(robotoBold22, whiteColor),
                   ),
                 ),
 

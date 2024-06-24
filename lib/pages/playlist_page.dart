@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/stuff/color.dart';
+import 'package:melodify_app_project/stuff/same_using.dart';
 
 class PlayListPage extends StatefulWidget {
   final String title;
@@ -124,8 +126,8 @@ class PlayListPageState extends State<PlayListPage> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Color.fromRGBO(30, 144, 255, 1),
-                  Colors.black,
+                  blueColor,
+                  blackColor,
                 ],
               ),
             ),
@@ -135,14 +137,10 @@ class PlayListPageState extends State<PlayListPage> {
               SliverPadding(
                 padding: const EdgeInsets.only(top: 10, left: 16, right: 16),
                 sliver: SliverAppBar(
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: transparent,
                   title: Text(
                     'Negav Radio',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'RobotoBoldFont',
-                      color: Colors.white,
-                    ),
+                    style: changeTextColor(robotoBold20, whiteColor)
                   ),
                   centerTitle: true,
                   titleSpacing: 15,
@@ -153,7 +151,7 @@ class PlayListPageState extends State<PlayListPage> {
                     icon: Icon(
                       Icons.keyboard_arrow_down,
                       size: 40,
-                      color: Colors.white,
+                      color: whiteColor,
                     ),
                   )
                 ),
@@ -181,19 +179,16 @@ class PlayListPageState extends State<PlayListPage> {
                               ),
                             ),
                             backgroundColor: MaterialStateProperty.all<Color>(
-                              Color.fromRGBO(207, 207, 207, 0.15),
+                              lightGrayColorLowOpacity,
                             ),
                             elevation: MaterialStateProperty.all<double>(0),
                             leading: Icon(
                               Icons.search,
-                              color: Color.fromRGBO(207, 207, 207, 1),
+                              color: lightGrayColor,
                             ),
                             hintText: 'Tìm trong danh sách phát',
                             hintStyle: MaterialStateProperty.all<TextStyle>(
-                              TextStyle(
-                                  color: Color.fromRGBO(207, 207, 207, 1),
-                                  fontSize: 14,
-                                  fontFamily: 'RobotoRegularFont'),
+                              changeTextColor(robotoRegular14, lightGrayColor)
                             ),
                           ),
                         ),
@@ -205,15 +200,11 @@ class PlayListPageState extends State<PlayListPage> {
                           width: 70,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: Color.fromRGBO(207, 207, 207, 0.15),
+                              color: lightGrayColorLowOpacity,
                               borderRadius: BorderRadius.circular(5)),
                           child: Text(
                             'Sắp xếp',
-                            style: TextStyle(
-                              fontFamily: 'RobotoRegularFont',
-                              fontSize: 14,
-                              color: Color.fromRGBO(207, 207, 207, 1),
-                            ),
+                            style: changeTextColor(robotoRegular14, lightGrayColor)
                           ),
                         )
                       ],
@@ -240,18 +231,14 @@ class PlayListPageState extends State<PlayListPage> {
                         children: [
                           Text(
                             'Với HIEUTHUHAI, AMEE, PRT MCK và nhiều hơn nữa',
-                            style: TextStyle(
-                              color: Color.fromRGBO(207, 207, 207, 1),
-                              fontFamily: 'RobotoMediumFont',
-                              fontSize: 14,
-                            ),
+                            style: changeTextColor(robotoMedium14, lightGrayColor)
                           ),
                           const SizedBox(
                             height: 8,
                           ),
                           Row(
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 22,
                                 height: 22,
                                 child: Image.asset(
@@ -263,19 +250,11 @@ class PlayListPageState extends State<PlayListPage> {
                               ),
                               Text(
                                 'Dành riêng cho ',
-                                style: TextStyle(
-                                  color: Color.fromRGBO(207, 207, 207, 1),
-                                  fontFamily: 'RobotoMediumFont',
-                                  fontSize: 14,
-                                ),
+                                style: changeTextColor(robotoMedium14, lightGrayColor)
                               ),
                               Text(
                                 'Lê Nguyễn Gia Bảo',
-                                style: TextStyle(
-                                  fontFamily: 'RobotoBoldFont',
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                ),
+                                style: changeTextColor(robotoBold16, whiteColor)
                               ),
                             ],
                           ),
@@ -286,11 +265,7 @@ class PlayListPageState extends State<PlayListPage> {
                             children: [
                               Text(
                                 '113 lượt lưu',
-                                style: TextStyle(
-                                  color: Color.fromRGBO(207, 207, 207, 1),
-                                  fontFamily: 'RobotoMediumFont',
-                                  fontSize: 14,
-                                ),
+                                style: changeTextColor(robotoMedium14, lightGrayColor)
                               ),
                               Container(
                                 width: 4,
@@ -300,16 +275,12 @@ class PlayListPageState extends State<PlayListPage> {
                                     const EdgeInsets.symmetric(horizontal: 5),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(50),
-                                  color: Color.fromRGBO(207, 207, 207, 1),
+                                  color: lightGrayColor
                                 ),
                               ),
                               Text(
                                 '3 giờ 0 phút',
-                                style: TextStyle(
-                                  color: Color.fromRGBO(207, 207, 207, 1),
-                                  fontFamily: 'RobotoMediumFont',
-                                  fontSize: 14,
-                                ),
+                                style: changeTextColor(robotoMedium14, lightGrayColor)
                               ),
                             ],
                           ),
@@ -329,7 +300,7 @@ class PlayListPageState extends State<PlayListPage> {
                                   icon: Icon(
                                     Icons.downloading,
                                     size: 30,
-                                    color: Color.fromRGBO(207, 207, 207, 1),
+                                    color: lightGrayColor
                                   )),
                               const SizedBox(
                                 width: 10,
@@ -339,7 +310,7 @@ class PlayListPageState extends State<PlayListPage> {
                                   icon: Icon(
                                     Icons.control_point,
                                     size: 30,
-                                    color: Color.fromRGBO(207, 207, 207, 1),
+                                    color: lightGrayColor
                                   )),
                               const SizedBox(
                                 width: 10,
@@ -349,7 +320,7 @@ class PlayListPageState extends State<PlayListPage> {
                                   icon: Icon(
                                     Icons.more_vert,
                                     size: 30,
-                                    color: Color.fromRGBO(207, 207, 207, 1),
+                                    color: lightGrayColor
                                   )),
                             ],
                           ),
@@ -365,14 +336,14 @@ class PlayListPageState extends State<PlayListPage> {
                                   icon: Icon(
                                     Icons.shuffle_rounded,
                                     size: 30,
-                                    color: Color.fromRGBO(30, 144, 255, 1),
+                                    color: blueColor,
                                   )),
                               IconButton(
                                   onPressed: () {},
                                   icon: Icon(
                                     Icons.play_circle,
                                     size: 50,
-                                    color: Color.fromRGBO(30, 144, 255, 1),
+                                    color: blueColor,
                                   )),
                             ],
                           )
@@ -411,20 +382,13 @@ class PlayListPageState extends State<PlayListPage> {
                                     children: [
                                       Text(
                                         item['musicName']!,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontFamily: 'RobotoBoldFont'),
+                                        style: changeTextColor(robotoBold16, whiteColor),
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                       ),
                                       Text(
                                         item['artist']!,
-                                        style: TextStyle(
-                                            color: Color.fromRGBO(
-                                                207, 207, 207, 1),
-                                            fontSize: 13,
-                                            fontFamily: 'RobotoMediumFont'),
+                                        style: changeTextColor(robotoMedium14, lightGrayColor)
                                       ),
                                     ],
                                   ),
@@ -436,7 +400,7 @@ class PlayListPageState extends State<PlayListPage> {
                                     onPressed: () {},
                                     icon: Icon(
                                       Icons.more_vert,
-                                      color: Color.fromRGBO(207, 207, 207, 1),
+                                      color: lightGrayColor,
                                       size: 26,
                                     ),
                                   ),
@@ -452,16 +416,13 @@ class PlayListPageState extends State<PlayListPage> {
                       padding: const EdgeInsets.only(left: 16),
                       child: Text(
                         'Có thể bạn sẽ thích',
-                        style: TextStyle(
-                            fontFamily: 'RobotoBoldFont',
-                            fontSize: 20,
-                            color: Colors.white),
+                        style: changeTextColor(robotoBold20, whiteColor),
                       ),
                     ),
                     const SizedBox(height: 5,),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 16),
-                      height: 490,
+                      height: 495,
                       child: GridView.builder(
                         physics: NeverScrollableScrollPhysics(),
                           padding: const EdgeInsets.all(0),
@@ -469,7 +430,7 @@ class PlayListPageState extends State<PlayListPage> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 28,
                             mainAxisSpacing: 20,
-                            mainAxisExtent: 235
+                            mainAxisExtent: 238
                           ),
                           itemCount: itemsLikes.length,
                           itemBuilder: (context, index) {
@@ -488,23 +449,17 @@ class PlayListPageState extends State<PlayListPage> {
                                         ),
                                       ),
                                     ),
+                                    const SizedBox(height: 5,),
                                     Text(
                                       itemLike['likeName']!,
-                                      style: TextStyle(
-                                        fontFamily: 'RobotoBoldFont',
-                                        color: Colors.white
-                                      ),
+                                      style: changeTextColor(robotoBold14, whiteColor),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,
                                     ),
                                     Text(
                                       itemLike['des']!,
-                                      style: TextStyle(
-                                        fontFamily: 'RobotoMediumFont',
-                                        color: Color.fromRGBO(207, 207, 207, 1),
-                                        fontSize: 13.5
-                                      ),
+                                      style: changeTextColor(robotoMedium135, lightGrayColor),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,
@@ -518,7 +473,7 @@ class PlayListPageState extends State<PlayListPage> {
                     ),
 
                     const SizedBox(
-                      height: 300,
+                      height: 150,
                     ),
                   ],
                 ),

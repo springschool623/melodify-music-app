@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/stuff/color.dart';
+import 'package:melodify_app_project/stuff/same_using.dart';
 
 class ListForYouPlaylist extends StatefulWidget {
   const ListForYouPlaylist({super.key});
@@ -42,16 +44,11 @@ class _ListForYouPlaylistState extends State<ListForYouPlaylist> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Container(
+                SizedBox(
                   width: 150,
                   child: Text(
                     items[index]['text']!,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(207, 207, 207, 1),
-                      fontFamily: 'RobotoRegularFont'
-                    ),
+                    style: changeTextColor(robotoBold12, lightGrayColor),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     softWrap: true,

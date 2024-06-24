@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/stuff/color.dart';
+import 'package:melodify_app_project/stuff/same_using.dart';
 
 class PlayingBar extends StatefulWidget {
   final int duration; // thời gian tăng chiều rộng (tính bằng giây)
@@ -73,7 +75,7 @@ class _PlayingBarState extends State<PlayingBar>
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: const Color.fromRGBO(39, 138, 152, 1),
+            color: cyan,
           ),
           child: Padding(
             padding: const EdgeInsets.only(top: 8),
@@ -90,26 +92,21 @@ class _PlayingBarState extends State<PlayingBar>
                           width: 40,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: Colors.blue,
+                            color: blueColor,
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 "Bật Nhạc Lên",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'RobotoBlackFont'),
+                                style: changeTextColor(robotoBlack14, whiteColor)
                               ),
                               Text(
                                 "HIEUTHUHAI",
-                                style: TextStyle(
-                                    color: Color.fromRGBO(207, 207, 207, 1),
-                                    fontSize: 14,
-                                    fontFamily: 'RobotoRegularFont'),
+                                style: changeTextColor(robotoRegular14, lightGrayColor)
                               ),
                             ],
                           ),
@@ -119,10 +116,10 @@ class _PlayingBarState extends State<PlayingBar>
                     Row(
                       children: [
                         const Icon(Icons.tv,
-                            size: 30, color: Color.fromRGBO(207, 207, 207, 1)),
+                            size: 30, color: lightGrayColor),
                         const SizedBox(width: 10),
                         const Icon(Icons.add_circle_outline_rounded,
-                            size: 30, color: Color.fromRGBO(207, 207, 207, 1)),
+                            size: 30, color: lightGrayColor),
                         const SizedBox(width: 5),
                         GestureDetector(
                           onTap: () {
@@ -132,7 +129,7 @@ class _PlayingBarState extends State<PlayingBar>
                           child: Icon(
                             _isPlaying ? Icons.pause : Icons.play_arrow_rounded,
                             size: 35,
-                            color: const Color.fromRGBO(255, 255, 255, 1),
+                            color: whiteColor,
                           ),
                         ),
                       ],
@@ -145,12 +142,12 @@ class _PlayingBarState extends State<PlayingBar>
                       children: [
                         Container(
                           height: 2,
-                          color: const Color.fromRGBO(255, 255, 255, 0.3),
+                          color: whiteLowOpacity,
                         ),
                         Container(
                           width: _widthAnimation.value,
                           height: 2,
-                          color: const Color.fromRGBO(255, 255, 255, 1),
+                          color: whiteColor,
                         ),
                       ],
                     );

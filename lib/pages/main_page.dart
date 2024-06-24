@@ -10,6 +10,8 @@ import 'package:melodify_app_project/pages/home_page.dart';
 import 'package:melodify_app_project/pages/library_page.dart';
 import 'package:melodify_app_project/pages/personal_page.dart';
 import 'package:melodify_app_project/pages/premium_page.dart';
+import 'package:melodify_app_project/stuff/color.dart';
+import 'package:melodify_app_project/stuff/same_using.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -75,8 +77,8 @@ class _MainPageState extends State<MainPage> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Color.fromRGBO(30, 144, 255, 1),
-                  Colors.black,
+                  blueColor,
+                  blackColor,
                 ],
               ),
             ),
@@ -95,7 +97,7 @@ class _MainPageState extends State<MainPage> {
                 PlayingBar(duration: 20),
                 BottomNavigationBar(
                   type: BottomNavigationBarType.fixed,
-                  backgroundColor: Colors.black.withOpacity(0.8), // Đặt màu nền với độ mờ
+                  backgroundColor: blackLowOpacity, // Đặt màu nền với độ mờ
                   items: const <BottomNavigationBarItem>[
                     BottomNavigationBarItem(
                       icon: Icon(Icons.home_outlined),
@@ -119,8 +121,10 @@ class _MainPageState extends State<MainPage> {
                       label: 'Cá nhân',
                     ),
                   ],
-                  unselectedItemColor: Colors.white54,
-                  selectedItemColor: Colors.white,
+                  selectedLabelStyle: changeTextColor(robotoMedium14, whiteColor),
+                  unselectedItemColor: lightGrayColor,
+                  selectedItemColor: whiteColor,
+                  unselectedLabelStyle: changeTextColor(robotoRegular12, lightGrayColor),
                   onTap: (index) => navigattionBar(index),
                 ),
               ],

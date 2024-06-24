@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/stuff/color.dart';
+import 'package:melodify_app_project/stuff/same_using.dart';
 
 class ListFavoriteArtist extends StatefulWidget {
   const ListFavoriteArtist({super.key});
@@ -43,12 +45,7 @@ class _ListFavoriteArtistState extends State<ListFavoriteArtist> {
                 const SizedBox(height: 10),
                 Text(
                   items[index]['text']!,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontFamily: 'MonFontsBold'
-                  ),
+                  style: changeTextColor(robotoBold14, whiteColor),
                   textAlign: TextAlign.center,
                 ),
               ],

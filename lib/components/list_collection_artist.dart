@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/stuff/color.dart';
+import 'package:melodify_app_project/stuff/same_using.dart';
 
 class ListCollectionArtist extends StatefulWidget {
   const ListCollectionArtist({super.key});
@@ -17,7 +19,7 @@ class _ListCollectionArtistState extends State<ListCollectionArtist> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height:194,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -40,16 +42,11 @@ class _ListCollectionArtistState extends State<ListCollectionArtist> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Container(
+                SizedBox(
                   width: 150,
                   child: Text(
                     items[index]['text']!,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(207, 207, 207, 1),
-                      fontFamily: 'RobotoRegularFont'
-                    ),
+                    style: changeTextColor(robotoBold12, lightGrayColor),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     softWrap: true,
