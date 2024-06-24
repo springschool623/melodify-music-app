@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:melodify_app_project/pages/playlist_page.dart';
+import 'package:melodify_app_project/stuff/color.dart';
+import 'package:melodify_app_project/stuff/same_using.dart';
 
 class RecentPlayListGridView extends StatefulWidget {
-  RecentPlayListGridView({super.key});
+  const RecentPlayListGridView({super.key});
 
   @override
   State<RecentPlayListGridView> createState() => _RecentPlayListGridViewState();
@@ -28,9 +30,10 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
         ((items.length - 1) *
             15); // 60 is the height of each GridTile, 15 is the mainAxisSpacing
 
-    return Container(
+    return SizedBox(
       height: totalHeight,
       child: GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -56,7 +59,7 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
               child: GridTile(
                   child: Container(
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(66, 66, 66, 1),
+                  color: darkGray,
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Row(
@@ -76,10 +79,7 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
                     Expanded(
                       child: Text(
                         items[index]['text']!,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'MonFontsBold',
-                            fontSize: 12),
+                        style: changeTextColor(robotoBold12, whiteColor),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
@@ -89,7 +89,7 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
                         padding: EdgeInsets.only(right: 10),
                         child: Icon(
                           Icons.more_horiz_outlined, 
-                          color: Color.fromRGBO(30, 144, 255, 1),
+                          color: blueColor,
                           size: 16,
                         ),
                       ),

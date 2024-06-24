@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/stuff/color.dart';
+import 'package:melodify_app_project/stuff/same_using.dart';
 
 class ListRecentPlay extends StatefulWidget {
   const ListRecentPlay({super.key});
@@ -50,12 +52,7 @@ class _ListRecentPlayState extends State<ListRecentPlay> {
                   alignment: isPlaylist ? Alignment.centerLeft : Alignment.center,
                   child: Text(
                     items[index]['text']!,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontFamily: 'RobotoRegularFont'
-                    ),
+                    style: changeTextColor(robotoBold13, whiteColor),
                     textAlign: isPlaylist ? TextAlign.left : TextAlign.center,
                   ),
                 ),
