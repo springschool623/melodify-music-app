@@ -24,9 +24,35 @@ class _MainPageState extends State<MainPage> {
 
   //Update các pages khi nhấn chọn
   void navigattionBar(int index) {
-    setState(() {
+    if(_selectedIndex == index) {
+      _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
+    } else {
+      setState(() {
       _selectedIndex = index;
     });
+    }
+  }
+
+  final List<GlobalKey<NavigatorState>> _navigatorKeys = [
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+  ];
+
+  Widget _buildOffstageNavigator(int index) {
+    return Offstage(
+      offstage: _selectedIndex != index,
+      child: Navigator(
+        key: _navigatorKeys[index],
+        onGenerateRoute: (routeSettings) {
+          return MaterialPageRoute(
+            builder: (context) => _pages[index],
+          );
+        },
+      ),
+    );
   }
 
   //Display Page
@@ -56,7 +82,9 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           // Hiển thị trang được chọn
-          _pages[_selectedIndex],
+          Stack(
+            children: List.generate(_pages.length, (index) => _buildOffstageNavigator(index)),
+          ),
           // Đặt BottomNavigationBar ở dưới cùng của màn hình
           Positioned(
             bottom: 0,

@@ -8,7 +8,8 @@ class PlayingBar extends StatefulWidget {
   State<PlayingBar> createState() => _PlayingBarState();
 }
 
-class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateMixin {
+class _PlayingBarState extends State<PlayingBar>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _widthAnimation;
   bool _isPlaying = false;
@@ -41,13 +42,15 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
       } else {
         if (_currentValue == 0) {
           // Nếu giá trị hiện tại là 0, bắt đầu lại từ đầu
-          _widthAnimation = Tween<double>(begin: 0, end: maxWidth).animate(_controller)
-            ..addListener(() {
-              setState(() {});
-            });
+          _widthAnimation =
+              Tween<double>(begin: 0, end: maxWidth).animate(_controller)
+                ..addListener(() {
+                  setState(() {});
+                });
           _controller.forward(from: 0);
         } else {
-          _controller.forward(from: _currentValue); // Tiếp tục từ giá trị đã lưu
+          _controller.forward(
+              from: _currentValue); // Tiếp tục từ giá trị đã lưu
         }
       }
       _isPlaying = !_isPlaying;
@@ -64,16 +67,16 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Container(
-          height: 70,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          height: 55,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: const Color.fromRGBO(39, 138, 152, 1),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 15),
+            padding: const EdgeInsets.only(top: 8),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -96,16 +99,17 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "sao trông em lại như thế này",
+                                "Bật Nhạc Lên",
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                    fontFamily: 'RobotoBlackFont'),
                               ),
                               Text(
-                                "Negav",
+                                "HIEUTHUHAI",
                                 style: TextStyle(
                                     color: Color.fromRGBO(207, 207, 207, 1),
-                                    fontSize: 12),
+                                    fontSize: 14,
+                                    fontFamily: 'RobotoRegularFont'),
                               ),
                             ],
                           ),
@@ -122,7 +126,8 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
                         const SizedBox(width: 5),
                         GestureDetector(
                           onTap: () {
-                            _togglePlayPause(MediaQuery.of(context).size.width - 40);
+                            _togglePlayPause(
+                                MediaQuery.of(context).size.width - 40);
                           },
                           child: Icon(
                             _isPlaying ? Icons.pause : Icons.play_arrow_rounded,

@@ -2,7 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:melodify_app_project/components/grid_recent.dart';
+import 'package:melodify_app_project/components/list_collection_artist.dart';
 import 'package:melodify_app_project/components/list_fav_artist.dart';
+import 'package:melodify_app_project/components/list_for_you.dart';
+import 'package:melodify_app_project/components/list_recent_play.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,7 +25,6 @@ class _HomePageState extends State<HomePage> {
           SliverPadding(
             padding: const EdgeInsets.only(top: 25, left: 16, right: 16),
             sliver: SliverAppBar(
-              pinned: true,
               backgroundColor: Colors.transparent,
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,7 +34,7 @@ class _HomePageState extends State<HomePage> {
                     'Welcome back!',
                     style: TextStyle(
                       fontSize: 16,
-                      fontFamily: 'MonFontsBold',
+                      fontFamily: 'RobotoBoldFont',
                       color: Colors.white,
                     ),
                   ),
@@ -40,7 +42,7 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     'ZeBao',
                     style: TextStyle(
-                      fontFamily: 'MonFontsBold',
+                      fontFamily: 'RobotoBoldFont',
                       fontSize: 14,
                       color: Color.fromRGBO(165, 165, 165, 1),
                     ),
@@ -78,18 +80,21 @@ class _HomePageState extends State<HomePage> {
                   child: Text(
                     'Gần đây',
                     style: TextStyle(
-                        fontFamily: 'MonFontsSemiBold',
+                        fontFamily: 'RobotoBoldFont',
                         color: Colors.white,
-                        fontSize: 20),
+                        fontSize: 22),
                   ),
                 ),
+
                 const SizedBox(
                   height: 8,
                 ),
+                //GridView cho các Playlist đã xem
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: RecentPlayListGridView(),
                 ),
+
                 const SizedBox(
                   height: 30,
                 ),
@@ -98,17 +103,92 @@ class _HomePageState extends State<HomePage> {
                   child: Text(
                     'Nghệ sĩ yêu thích của bạn',
                     style: TextStyle(
-                        fontFamily: 'MonFontsSemiBold',
+                        fontFamily: 'RobotoBoldFont',
                         color: Colors.white,
-                        fontSize: 20),
+                        fontSize: 22),
                   ),
                 ),
+
                 const SizedBox(
                   height: 8,
                 ),
+                //List các nghệ sĩ yêu thích
                 Padding(
                   padding: const EdgeInsets.only(left: 16),
                   child: ListFavoriteArtist(),
+                ),
+
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Text(
+                    'Mới phát gần đây',
+                    style: TextStyle(
+                        fontFamily: 'RobotoBoldFont',
+                        color: Colors.white,
+                        fontSize: 22),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 8,
+                ),
+                //List các Playlist và nghệ sĩ đã phát gần đây
+                Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: ListRecentPlay(),
+                ),
+
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Text(
+                    'Dành cho bạn',
+                    style: TextStyle(
+                        fontFamily: 'RobotoBoldFont',
+                        color: Colors.white,
+                        fontSize: 22),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 8,
+                ),
+                //List các Playlist dành cho bạn
+                Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: ListForYouPlaylist(),
+                ),
+
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Text(
+                    'Tuyển tập nhạc hay nhất của các nghệ sĩ',
+                    style: TextStyle(
+                        fontFamily: 'RobotoBoldFont',
+                        color: Colors.white,
+                        fontSize: 22),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 8,
+                ),
+                //List Tuyển tập nhạc 
+                Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: ListCollectionArtist(),
+                ),
+
+                const SizedBox(
+                  height: 150,
                 ),
               ],
             ),

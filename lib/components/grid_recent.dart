@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/pages/playlist_page.dart';
 
 class RecentPlayListGridView extends StatefulWidget {
   RecentPlayListGridView({super.key});
@@ -42,9 +43,15 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
             return GestureDetector(
               onTap: () {
                 setState(() {
-                  selectedIndex =
-                      index; // Cập nhật chỉ số của playlist được chọn
+                  selectedIndex = index; // Cập nhật chỉ số của playlist được chọn
                 });
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PlayListPage(title: items[index]['text']!),
+                  ),
+                );
               },
               child: GridTile(
                   child: Container(

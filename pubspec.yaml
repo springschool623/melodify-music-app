@@ -34,5 +34,18 @@ flutter:
     - family: MonFontsSemiBold
       fonts:
         - asset: assets/fonts/Montserrat-SemiBold.ttf
+
+    - family: RobotoBlackFont
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Black.ttf
+    - family: RobotoBoldFont
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Bold.ttf
+    - family: RobotoMediumFont
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Medium.ttf
+    - family: RobotoRegularFont
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Regular.ttf
   assets:
     - assets/images/
