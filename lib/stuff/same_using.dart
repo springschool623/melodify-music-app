@@ -84,6 +84,11 @@ TextStyle robotoRegular12 = TextStyle(
   fontSize: 12,
   color: color,
 );
+TextStyle robotoRegular10 = TextStyle(
+  fontFamily: 'RobotoRegularFont',
+  fontSize: 10,
+  color: color,
+);
 
 
 //ROBOTO BLACK FONT
@@ -165,7 +170,13 @@ TextStyle robotoMedium12 = TextStyle(
   fontSize: 12,
   color: color,
 );
+TextStyle robotoMedium10 = TextStyle(
+  fontFamily: 'RobotoMediumFont',
+  fontSize: 10,
+  color: color,
+);
 
 TextStyle changeTextColor(TextStyle style, Color color) {
   return style.copyWith(color: color);
 }
+
