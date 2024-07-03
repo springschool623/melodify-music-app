@@ -1,47 +1,29 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
-import 'package:melodify_app_project/components/botnav.dart';
-import 'package:melodify_app_project/components/grid_recent.dart';
-import 'package:melodify_app_project/components/list_fav_artist.dart';
 import 'package:melodify_app_project/components/playing_bar.dart';
+import 'package:melodify_app_project/components/visiblebotnavbar.dart';
 import 'package:melodify_app_project/pages/find_page.dart';
 import 'package:melodify_app_project/pages/home_page.dart';
 import 'package:melodify_app_project/pages/library_page.dart';
 import 'package:melodify_app_project/pages/personal_page.dart';
 import 'package:melodify_app_project/pages/premium_page.dart';
+import 'package:melodify_app_project/stuff/background.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  //Kiểm soát botnav
   int _selectedIndex = 0;
 
-  //Update các pages khi nhấn chọn
-  void navigattionBar(int index) {
-    if(_selectedIndex == index) {
-      _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
-    } else {
-      setState(() {
-      _selectedIndex = index;
-    });
-    }
-  }
-
-  final List<GlobalKey<NavigatorState>> _navigatorKeys = [
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-  ];
+  final List<GlobalKey<NavigatorState>> _navigatorKeys = List.generate(
+    5,
+    (_) => GlobalKey<NavigatorState>(),
+  );
 
   Widget _buildOffstageNavigator(int index) {
     return Offstage(
@@ -51,84 +33,121 @@ class _MainPageState extends State<MainPage> {
         onGenerateRoute: (routeSettings) {
           return MaterialPageRoute(
             builder: (context) => _pages[index],
+            settings: routeSettings,
           );
         },
       ),
     );
   }
 
-  //Display Page
   final List<Widget> _pages = [
     const HomePage(),
     const SearchPage(),
     const PremiumPage(),
     const LibraryPage(),
-    const PersonnalPage()
+    const PersonnalPage(),
   ];
+
+  // Assuming _myValueNotifier is a ValueNotifier or ChangeNotifier
+  ValueNotifier<int> _myValueNotifier = ValueNotifier<int>(0);
+  // Other variables and methods...
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize your listeners here
+    _myValueNotifier.addListener(_listener);
+  }
+
+  @override
+  void dispose() {
+    // Clean up your listeners here
+    _myValueNotifier.removeListener(_listener);
+    _myValueNotifier.dispose(); // Dispose of the notifier if needed
+    super.dispose();
+  }
+
+  void _listener() {
+    // Handle updates from _myValueNotifier here
+    if (mounted) {
+      setState(() {
+        // Update your state variables here
+        // Example: _myStateVariable = _myValueNotifier.value;
+      });
+    }
+  }
+
+  void navigateToPage(int index) {
+    if (_selectedIndex == index) {
+      // Pop to the first route if already on the selected page
+      _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
+    } else {
+      // Navigate to the selected page
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  blueColor,
-                  blackColor,
-                ],
-              ),
-            ),
-          ),
-          // Hiển thị trang được chọn
+          buildBackgroundContainer(),
           Stack(
             children: List.generate(_pages.length, (index) => _buildOffstageNavigator(index)),
           ),
-          // Đặt BottomNavigationBar ở dưới cùng của màn hình
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                PlayingBar(duration: 20),
-                BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed,
-                  backgroundColor: blackLowOpacity, // Đặt màu nền với độ mờ
-                  items: const <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.home_outlined),
-                      label: 'Trang chủ',
-                      activeIcon: Icon(Icons.home),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.search_outlined),
-                      label: 'Tìm kiếm',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.my_library_music_outlined),
-                      label: 'Thư viện',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.paid_outlined),
-                      label: 'Premium',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.person_outline),
-                      label: 'Cá nhân',
-                    ),
-                  ],
-                  selectedLabelStyle: changeTextColor(robotoMedium14, whiteColor),
-                  unselectedItemColor: lightGrayColor,
-                  selectedItemColor: whiteColor,
-                  unselectedLabelStyle: changeTextColor(robotoRegular12, lightGrayColor),
-                  onTap: (index) => navigattionBar(index),
+          ValueListenableBuilder<bool>(
+            valueListenable: VisibilitySettings.showBottomNavAndPlayingBar,
+            builder: (context, show, child) {
+              return Visibility(
+                visible: show,
+                child: Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Column(
+                    children: [
+                      PlayingBar(duration: 20), // Adjust duration as needed
+                      BottomNavigationBar(
+                        type: BottomNavigationBarType.fixed,
+                        backgroundColor: blackLowOpacity,
+                        items: const <BottomNavigationBarItem>[
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.home_outlined),
+                            label: 'Trang chủ',
+                            activeIcon: Icon(Icons.home),
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.search_outlined),
+                            label: 'Tìm kiếm',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.my_library_music_outlined),
+                            label: 'Thư viện',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.paid_outlined),
+                            label: 'Premium',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.person_outline),
+                            label: 'Cá nhân',
+                          ),
+                        ],
+                        selectedLabelStyle: changeTextColor(robotoMedium14, whiteColor),
+                        unselectedItemColor: lightGrayColor,
+                        selectedItemColor: whiteColor,
+                        unselectedLabelStyle: changeTextColor(robotoRegular12, lightGrayColor),
+                        currentIndex: _selectedIndex,
+                        onTap: navigateToPage,
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ],
       ),
