@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/components/visiblebotnavbar.dart';
 import 'package:melodify_app_project/pages/playlist_page.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
@@ -25,39 +26,36 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate the total height based on the number of items and the estimated height of each GridTile
-    final double totalHeight = (items.length * 22) +
-        ((items.length - 1) *
-            15); // 60 is the height of each GridTile, 15 is the mainAxisSpacing
+    final double totalHeight = (items.length * 22) + ((items.length - 1) * 15);
 
     return SizedBox(
       height: totalHeight,
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 15,
-            childAspectRatio: 22 / 7,
-          ),
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedIndex = index; // Cập nhật chỉ số của playlist được chọn
-                });
+        padding: EdgeInsets.zero,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 15,
+          childAspectRatio: 22 / 7,
+        ),
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                selectedIndex = index;
+              });
 
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PlayListPage(title: items[index]['text']!),
-                  ),
-                );
-              },
-              child: GridTile(
-                  child: Container(
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PlayListPage(title: items[index]['text']!),
+                ),
+              );
+            },
+            child: GridTile(
+              child: Container(
                 decoration: BoxDecoration(
                   color: darkGray,
                   borderRadius: BorderRadius.circular(5),
@@ -66,16 +64,14 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          bottomLeft: Radius.circular(5)),
+                        topLeft: Radius.circular(5),
+                        bottomLeft: Radius.circular(5)),
                       child: Image.asset(
                         items[index]['image']!,
                         height: 60,
                       ),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         items[index]['text']!,
@@ -84,20 +80,23 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
                         maxLines: 2,
                       ),
                     ),
-                    if(selectedIndex == index)
+                    if (selectedIndex == index)
                       const Padding(
                         padding: EdgeInsets.only(right: 10),
                         child: Icon(
-                          Icons.more_horiz_outlined, 
+                          Icons.more_horiz_outlined,
                           color: blueColor,
                           size: 16,
                         ),
                       ),
                   ],
                 ),
-              )),
-            );
-          }),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
+

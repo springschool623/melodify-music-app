@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/components/visiblebotnavbar.dart';
 import 'package:melodify_app_project/pages/playing_page.dart';
 import 'package:melodify_app_project/stuff/background.dart';
 import 'package:melodify_app_project/stuff/color.dart';
@@ -356,6 +357,8 @@ class PlayListPageState extends State<PlayListPage> {
                               children: [
                                 InkWell(
                                   onTap: () {
+                                    // Update BOTNAV visibility status
+                                    VisibilitySettings.showBottomNavAndPlayingBar.value = false;
                                     Navigator.push(
                                       context, 
                                       MaterialPageRoute(
@@ -368,7 +371,10 @@ class PlayListPageState extends State<PlayListPage> {
                                         ),
                                         settings: RouteSettings(name: 'PlayingMusicPage'),
                                       )
-                                    );
+                                    ).then((_) {
+                                      // Restore visibility status when returning
+                                      VisibilitySettings.showBottomNavAndPlayingBar.value = true;
+                                    });
                                   },
                                   child: Container(
                                     width: 50,
@@ -444,7 +450,7 @@ class PlayListPageState extends State<PlayListPage> {
                           itemBuilder: (context, index) {
                             final itemLike = itemsLikes[index];
                             return GridTile(
-                              child: Container(
+                              child: SizedBox(
                                 height: 300,
                                 child: Column(
                                   children: [
