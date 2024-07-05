@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/components/visiblebotnavbar.dart';
+import 'package:melodify_app_project/pages/playing_page.dart';
+import 'package:melodify_app_project/stuff/background.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
 
@@ -120,18 +123,7 @@ class PlayListPageState extends State<PlayListPage> {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  blueColor,
-                  blackColor,
-                ],
-              ),
-            ),
-          ),
+          buildBackgroundContainer(),
           CustomScrollView(
             slivers: [
               SliverPadding(
@@ -139,7 +131,7 @@ class PlayListPageState extends State<PlayListPage> {
                 sliver: SliverAppBar(
                   backgroundColor: transparent,
                   title: Text(
-                    'Negav Radio',
+                    widget.title,
                     style: changeTextColor(robotoBold20, whiteColor)
                   ),
                   centerTitle: true,
@@ -363,13 +355,35 @@ class PlayListPageState extends State<PlayListPage> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: AssetImage(item['image']!),
+                                InkWell(
+                                  onTap: () {
+                                    // Update BOTNAV visibility status
+                                    VisibilitySettings.showBottomNavAndPlayingBar.value = false;
+                                    Navigator.push(
+                                      context, 
+                                      MaterialPageRoute(
+                                        builder: (context) => PlayingMusicPage(
+                                          musicName: item['musicName']!,
+                                          artist: item['artist']!,
+                                          image: item['image']!,
+                                          playListTitle: widget.title,
+                                          duration: 100,
+                                        ),
+                                        settings: RouteSettings(name: 'PlayingMusicPage'),
+                                      )
+                                    ).then((_) {
+                                      // Restore visibility status when returning
+                                      VisibilitySettings.showBottomNavAndPlayingBar.value = true;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: AssetImage(item['image']!),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -436,7 +450,7 @@ class PlayListPageState extends State<PlayListPage> {
                           itemBuilder: (context, index) {
                             final itemLike = itemsLikes[index];
                             return GridTile(
-                              child: Container(
+                              child: SizedBox(
                                 height: 300,
                                 child: Column(
                                   children: [
