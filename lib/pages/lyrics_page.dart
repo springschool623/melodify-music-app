@@ -29,7 +29,7 @@ class _LyricsPageState extends State<LyricsPage>
   late Animation<double> _widthAnimation;
   bool _isPlaying = false;
   double _currentValue = 0;
-  late Timer _timer;
+  Timer? _timer;
   int _elapsedSeconds = 0;
 
   bool _isDisposed = false;
@@ -65,7 +65,7 @@ class _LyricsPageState extends State<LyricsPage>
       if (_isPlaying) {
         _currentValue = _controller.value; //Lưu lại giá trị hiện tại
         _controller.stop();
-        _timer.cancel();
+        _timer?.cancel();
       } else {
         if (_currentValue == 0) {
           //Nếu giá trị hiện tại là 0, bắt đầu lại từ đầu
@@ -93,7 +93,7 @@ class _LyricsPageState extends State<LyricsPage>
       setState(() {
         _elapsedSeconds++;
         if (_elapsedSeconds >= widget.duration) {
-          _timer.cancel();
+          _timer?.cancel();
         }
       });
     });
@@ -101,7 +101,7 @@ class _LyricsPageState extends State<LyricsPage>
 
   void _resetTimer() {
     _controller.reset();
-    _timer.cancel();
+    _timer?.cancel();
     setState(() {
       _elapsedSeconds = 0;
       _currentValue = 0;
@@ -113,7 +113,7 @@ class _LyricsPageState extends State<LyricsPage>
   void dispose() {
     _isDisposed = true;
     _controller.dispose();
-    _timer.cancel();
+    _timer?.cancel();
 
     // Đặt đoạn code để hiển thị lại BottomNav và PlayingBar khi trang bị hủy
     WidgetsBinding.instance!.addPostFrameCallback((_) {

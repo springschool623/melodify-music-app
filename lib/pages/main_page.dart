@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:melodify_app_project/components/playing_bar.dart';
+import 'package:melodify_app_project/components/visible_playing_bar.dart';
 import 'package:melodify_app_project/components/visiblebotnavbar.dart';
 import 'package:melodify_app_project/pages/find_page.dart';
 import 'package:melodify_app_project/pages/home_page.dart';
@@ -9,6 +10,8 @@ import 'package:melodify_app_project/pages/premium_page.dart';
 import 'package:melodify_app_project/stuff/background.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
+import 'package:provider/provider.dart';
+
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -49,7 +52,7 @@ class _MainPageState extends State<MainPage> {
   ];
 
   // Assuming _myValueNotifier is a ValueNotifier or ChangeNotifier
-  ValueNotifier<int> _myValueNotifier = ValueNotifier<int>(0);
+  final ValueNotifier<int> _myValueNotifier = ValueNotifier<int>(0);
   // Other variables and methods...
 
   @override
@@ -89,6 +92,18 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
+  String _currentSongTitle = '';
+  String _currentArtistName = '';
+  int _currentDuration = 0;
+
+  void updatePlayingSong(String title, String artist, int duration) {
+    setState(() {
+      _currentSongTitle = title;
+      _currentArtistName = artist;
+      _currentDuration = duration;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,7 +124,20 @@ class _MainPageState extends State<MainPage> {
                   right: 0,
                   child: Column(
                     children: [
-                      PlayingBar(duration: 20), // Adjust duration as needed
+                      //Ẩn hiện cũng như chỉ muốn hiện cái bài lên đây
+                      Consumer<CurrentPlayingSong>(
+                        builder: (context, currentSong, child) {
+                          return Visibility(
+                            visible: currentSong.isVisible,
+                            child: PlayingBar(
+                              duration: currentSong.duration,
+                              artistName: currentSong.artist,
+                              musicName: currentSong.title,
+                              musicImg: currentSong.img,
+                            ),
+                          );
+                        },
+                      ),
                       BottomNavigationBar(
                         type: BottomNavigationBarType.fixed,
                         backgroundColor: blackLowOpacity,
