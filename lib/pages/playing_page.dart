@@ -427,13 +427,6 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
                               musicName: widget.musicName,
                               artist: widget.artist,
                               duration: 150,
-                            ),
-                            settings: const RouteSettings(name: 'LyricsPage'),
-                          ),
-                        ).then((_) {
-                          // Restore visibility status when returning
-                          VisibilitySettings.showBottomNavAndPlayingBar.value = false;
-                        });
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 36),
@@ -524,6 +517,75 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
                             MaterialPageRoute(
                               builder: (context) =>
                                   ArtistPage(artistName: 'Negav', artistImage: widget.image,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 36),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: darkGray,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 220,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: const DecorationImage(
+                                      fit: BoxFit.fitHeight,
+                                      image: AssetImage(
+                                        'assets/images/bannerartist.png',
+                                      ))),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Negav',
+                                            style: changeTextColor(
+                                                robotoBold20, whiteColor),
+                                          ),
+                                          Text(
+                                            '513.1N người nghe hằng tiếng',
+                                            style: changeTextColor(
+                                                robotoRegular12,
+                                                lightGrayColor),
+                                          ),
+                                        ],
+                                      ),
+                                      OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            minimumSize: const Size(60, 25),
+                                          ),
+                                          onPressed: () {},
+                                          child: Text(
+                                            'Theo dõi',
+                                            style: changeTextColor(
+                                                robotoBlack12, whiteColor),
+                                          )),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    'sap noi tieng',
+                                    style: changeTextColor(
+                                        robotoMedium12, lightGrayColor),
+                                  ),
+                                ],
+                              ),
                             )
                         ).then((_) {
                           VisibilitySettings.showBottomNavAndPlayingBar.value = false;

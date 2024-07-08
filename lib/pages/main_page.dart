@@ -138,6 +138,7 @@ class _MainPageState extends State<MainPage> {
                           );
                         },
                       ),
+                      const PlayingBar(duration: 20), // Adjust duration as needed
                       BottomNavigationBar(
                         type: BottomNavigationBarType.fixed,
                         backgroundColor: blackLowOpacity,
