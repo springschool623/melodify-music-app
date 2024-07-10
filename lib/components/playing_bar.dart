@@ -1,3 +1,5 @@
+import 'dart:async';
+=======
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -6,6 +8,17 @@ import 'package:melodify_app_project/stuff/same_using.dart';
 
 class PlayingBar extends StatefulWidget {
   final int duration; // thời gian tăng chiều rộng (tính bằng giây)
+  final Function(bool isPlaying) onPlayPause;
+  final String songName;
+  final String artistName; // thêm tham số artistName
+
+  const PlayingBar({
+    super.key,
+    required this.duration,
+    required this.onPlayPause,
+    required this.songName,
+    required this.artistName, // thêm tham số artistName
+  });
   final String musicName;
   final String artistName;
   final String musicImg;
@@ -15,12 +28,13 @@ class PlayingBar extends StatefulWidget {
   State<PlayingBar> createState() => _PlayingBarState();
 }
 
-class _PlayingBarState extends State<PlayingBar>
-    with SingleTickerProviderStateMixin {
+class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _widthAnimation;
   bool _isPlaying = false;
   double _currentValue = 0;
+  late Timer _timer;
+  int _elapsedSeconds = 0;
 
   @override
   void initState() {
@@ -33,6 +47,7 @@ class _PlayingBarState extends State<PlayingBar>
         if (status == AnimationStatus.completed) {
           setState(() {
             _isPlaying = false;
+            widget.onPlayPause(_isPlaying); // Notify that playback has stopped
           });
         }
       });
@@ -46,21 +61,47 @@ class _PlayingBarState extends State<PlayingBar>
       if (_isPlaying) {
         _currentValue = _controller.value; // Lưu lại giá trị hiện tại
         _controller.stop();
+        _timer.cancel();
       } else {
         if (_currentValue == 0) {
           // Nếu giá trị hiện tại là 0, bắt đầu lại từ đầu
-          _widthAnimation =
-              Tween<double>(begin: 0, end: maxWidth).animate(_controller)
-                ..addListener(() {
-                  setState(() {});
-                });
+          _widthAnimation = Tween<double>(begin: 0, end: maxWidth).animate(_controller)
+            ..addListener(() {
+              setState(() {});
+            });
           _controller.forward(from: 0);
+          _startTimer();
         } else {
-          _controller.forward(
-              from: _currentValue); // Tiếp tục từ giá trị đã lưu
+          _controller.forward(from: _currentValue); // Tiếp tục từ giá trị đã lưu
+          _startTimer(resume: true);
         }
       }
       _isPlaying = !_isPlaying;
+      widget.onPlayPause(_isPlaying); // Notify the current play/pause state
+    });
+  }
+
+  void _startTimer({bool resume = false}) {
+    if (!resume) {
+      _elapsedSeconds = 0;
+    }
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _elapsedSeconds++;
+        if (_elapsedSeconds >= widget.duration) {
+          _timer.cancel();
+        }
+      });
+    });
+  }
+
+  void _resetTimer() {
+    _controller.reset();
+    _timer.cancel();
+    setState(() {
+      _elapsedSeconds = 0;
+      _currentValue = 0;
+      _isPlaying = false;
     });
   }
 
@@ -79,7 +120,14 @@ class _PlayingBarState extends State<PlayingBar>
   @override
   void dispose() {
     _controller.dispose();
+    _timer.cancel();
     super.dispose();
+  }
+
+  String _formatDuration(int seconds) {
+    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+    final remainingSeconds = (seconds % 60).toString().padLeft(2, '0');
+    return '$minutes:$remainingSeconds';
   }
 
   @override
@@ -120,6 +168,13 @@ class _PlayingBarState extends State<PlayingBar>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text(
+                                widget.songName,
+                                style: changeTextColor(robotoBlack14, whiteColor),
+                              ),
+                              Text(
+                                widget.artistName, // hiển thị tên nghệ sĩ
+                                style: changeTextColor(robotoRegular14, lightGrayColor),
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.5, // Giới hạn chiều rộng
                                 child: Text(
@@ -145,15 +200,15 @@ class _PlayingBarState extends State<PlayingBar>
                     ),
                     Row(
                       children: [
-                        const Icon(Icons.tv,
-                            size: 30, color: lightGrayColor),
+                        const Icon(Icons.tv, size: 30, color: lightGrayColor),
                         const SizedBox(width: 10),
+                        const Icon(Icons.add_circle_outline_rounded, size: 30, color: lightGrayColor),
+                        const SizedBox(width: 5),
                         const Icon(Icons.add_circle_outline_rounded,
                             size: 30, color: lightGrayColor),
                         GestureDetector(
                           onTap: () {
-                            _togglePlayPause(
-                                MediaQuery.of(context).size.width - 40);
+                            _togglePlayPause(MediaQuery.of(context).size.width - 40);
                           },
                           child: Icon(
                             _isPlaying ? Icons.pause : Icons.play_arrow_rounded,
@@ -162,7 +217,7 @@ class _PlayingBarState extends State<PlayingBar>
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
                 LayoutBuilder(

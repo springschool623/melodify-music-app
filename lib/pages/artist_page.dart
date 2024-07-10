@@ -6,6 +6,7 @@ import 'package:melodify_app_project/stuff/same_using.dart';
 
 class ArtistPage extends StatefulWidget {
   final String artistName;
+  const ArtistPage({super.key, required this.artistName});
   final String artistImage;
   const ArtistPage({super.key, required this.artistName, required this.artistImage});
 
@@ -19,6 +20,21 @@ class _ArtistPageState extends State<ArtistPage> {
     return Scaffold(
       body: Stack(
         children: [
+          buildBackgroundContainer(),
+          CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                  expandedHeight: 250,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Image.asset(
+                      'assets/images/artist2.png',
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
+                    ),
+                  ),
+                ),
+              const SliverToBoxAdapter(
+                child: Text('Artist'),
           moreBlackBackground(),
           CustomScrollView(
             slivers: [

@@ -58,7 +58,7 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
     //     VisibilitySettings.showBottomNavAndPlayingBar.value = false;
     //   }
     // });
-    // _someValueNotifier.addListener(_listener);
+    _someValueNotifier.addListener(_listener);
 
     //Just for playing bar
     _controller = AnimationController(
@@ -138,8 +138,8 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
     if (!_isDisposed) {
       // Hiển thị BottomNav và PlayingBar khi rời khỏi trang này
       // VisibilitySettings.showBottomNavAndPlayingBar.value = true;
-      // _someValueNotifier.removeListener(_listener);
-      // _someValueNotifier.dispose();
+      _someValueNotifier.removeListener(_listener);
+      _someValueNotifier.dispose();
 
       _controller.dispose();
       _timer.cancel();
@@ -511,6 +511,13 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
                     ),
                     GestureDetector(
                       onTap: () {
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: (context) => const ArtistPage(artistName: 'Negav'),
+                            )
+                          );
+                        },
                         VisibilitySettings.showBottomNavAndPlayingBar.value = true;
                         Navigator.push(
                             context,
