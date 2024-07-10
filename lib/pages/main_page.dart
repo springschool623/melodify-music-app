@@ -1,4 +1,13 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/conf/const.dart';
+import 'package:spotify/spotify.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'dart:async';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
 import 'package:melodify_app_project/components/playing_bar.dart';
 import 'package:melodify_app_project/components/visiblebotnavbar.dart';
 import 'package:melodify_app_project/pages/find_page.dart';
@@ -19,11 +28,138 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
+  String musicTrackId = "7J8AUbvYoToCvGRQeSXBx7";
+  final player = AudioPlayer();
+  Duration? songDuration;
+  String songName = "";
+  String artistName = ""; // thêm biến artistName
+  String? audioUrl;
+  PlayerState playerState = PlayerState.completed;
+  bool isLoading = true;
+  double playbackRate = 1.0;
+  bool isPrepared = false;
+  bool isCached = false;
 
   final List<GlobalKey<NavigatorState>> _navigatorKeys = List.generate(
     5,
     (_) => GlobalKey<NavigatorState>(),
   );
+
+  final List<Widget> _pages = [
+    const HomePage(),
+    const SearchPage(),
+    const LibraryPage(),
+    const PremiumPage(),
+    const PersonnalPage(),
+  ];
+
+  final ValueNotifier<int> _myValueNotifier = ValueNotifier<int>(0);
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTrack();
+    player.onPlayerStateChanged.listen((state) {
+      setState(() {
+        playerState = state;
+      });
+    });
+    _myValueNotifier.addListener(_listener);
+  }
+
+  @override
+  void dispose() {
+    _myValueNotifier.removeListener(_listener);
+    _myValueNotifier.dispose();
+    player.dispose(); // Dispose of the audio player
+    super.dispose();
+  }
+
+  Future<void> fetchTrack() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      final credentials = SpotifyApiCredentials(CustomString.clientId, CustomString.clientSecret);
+      final spotify = SpotifyApi(credentials);
+
+      final trackFuture = spotify.tracks.get(musicTrackId);
+      final yt = YoutubeExplode();
+
+      final track = await trackFuture;
+      songName = track.name ?? "";
+      artistName = track.artists?.first.name ?? ""; // lấy tên nghệ sĩ
+
+      if (songName.isNotEmpty) {
+        final video = (await yt.search.search(songName)).first;
+        final videoId = video.id.value;
+        songDuration = video.duration;
+
+        var manifest = await yt.videos.streamsClient.getManifest(videoId);
+        audioUrl = manifest.audioOnly.first.url.toString();
+
+        final cacheDir = await getTemporaryDirectory();
+        final cachedFile = File('${cacheDir.path}/$musicTrackId.mp3');
+
+        if (await cachedFile.exists()) {
+          audioUrl = cachedFile.path;
+          isCached = true;
+        } else {
+          final response = await http.get(Uri.parse(audioUrl!));
+          await cachedFile.writeAsBytes(response.bodyBytes);
+          audioUrl = cachedFile.path;
+          isCached = true;
+        }
+
+        await player.setPlaybackRate(playbackRate);
+        await player.setSourceUrl(audioUrl!);
+        isPrepared = true;
+
+        print("Audio URL fetched and set.");
+      }
+    } catch (e) {
+      if (e is TimeoutException) {
+        print('Fetch track timed out');
+      } else {
+        print('An error occurred: $e');
+      }
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void pauseAudio() {
+    player.pause();
+  }
+
+  void playAudio() {
+    if (audioUrl != null && isPrepared && !isLoading) {
+      print("Playing audio.");
+      player.resume();
+      print("Current playback rate: $playbackRate");
+    }
+  }
+
+  void _listener() {
+    if (mounted) {
+      setState(() {
+        // Update your state variables here
+      });
+    }
+  }
+
+  void navigateToPage(int index) {
+    if (_selectedIndex == index) {
+      _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
 
   Widget _buildOffstageNavigator(int index) {
     return Offstage(
@@ -40,57 +176,9 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  final List<Widget> _pages = [
-    const HomePage(),
-    const SearchPage(),
-    const LibraryPage(),
-    const PremiumPage(),
-    const PersonnalPage(),
-  ];
-
-  // Assuming _myValueNotifier is a ValueNotifier or ChangeNotifier
-  final ValueNotifier<int> _myValueNotifier = ValueNotifier<int>(0);
-  // Other variables and methods...
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize your listeners here
-    _myValueNotifier.addListener(_listener);
-  }
-
-  @override
-  void dispose() {
-    // Clean up your listeners here
-    _myValueNotifier.removeListener(_listener);
-    _myValueNotifier.dispose(); // Dispose of the notifier if needed
-    super.dispose();
-  }
-
-  void _listener() {
-    // Handle updates from _myValueNotifier here
-    if (mounted) {
-      setState(() {
-        // Update your state variables here
-        // Example: _myStateVariable = _myValueNotifier.value;
-      });
-    }
-  }
-
-  void navigateToPage(int index) {
-    if (_selectedIndex == index) {
-      // Pop to the first route if already on the selected page
-      _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
-    } else {
-      // Navigate to the selected page
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    int durationInSeconds = songDuration?.inSeconds ?? 0;
     return Scaffold(
       body: Stack(
         children: [
@@ -109,7 +197,20 @@ class _MainPageState extends State<MainPage> {
                   right: 0,
                   child: Column(
                     children: [
-                      const PlayingBar(duration: 20), // Adjust duration as needed
+                      isLoading
+                          ? const CircularProgressIndicator()
+                          : PlayingBar(
+                              duration: durationInSeconds,
+                              onPlayPause: (bool isPlaying) {
+                                if (isPlaying) {
+                                  playAudio();
+                                } else {
+                                  pauseAudio();
+                                }
+                              },
+                              songName: songName,
+                              artistName: artistName, // truyền artistName vào PlayingBar
+                            ),
                       BottomNavigationBar(
                         type: BottomNavigationBarType.fixed,
                         backgroundColor: blackLowOpacity,
