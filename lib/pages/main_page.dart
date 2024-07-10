@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:melodify_app_project/components/playing_bar.dart';
+import 'package:melodify_app_project/components/visible_playing_bar.dart';
 import 'package:melodify_app_project/components/visiblebotnavbar.dart';
 import 'package:melodify_app_project/pages/find_page.dart';
 import 'package:melodify_app_project/pages/home_page.dart';
@@ -18,6 +19,8 @@ import 'package:melodify_app_project/pages/premium_page.dart';
 import 'package:melodify_app_project/stuff/background.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
+import 'package:provider/provider.dart';
+
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -174,6 +177,16 @@ class _MainPageState extends State<MainPage> {
         },
       ),
     );
+  String _currentSongTitle = '';
+  String _currentArtistName = '';
+  int _currentDuration = 0;
+
+  void updatePlayingSong(String title, String artist, int duration) {
+    setState(() {
+      _currentSongTitle = title;
+      _currentArtistName = artist;
+      _currentDuration = duration;
+    });
   }
 
   @override
@@ -211,6 +224,21 @@ class _MainPageState extends State<MainPage> {
                               songName: songName,
                               artistName: artistName, // truyền artistName vào PlayingBar
                             ),
+                      //Ẩn hiện cũng như chỉ muốn hiện cái bài lên đây
+                      Consumer<CurrentPlayingSong>(
+                        builder: (context, currentSong, child) {
+                          return Visibility(
+                            visible: currentSong.isVisible,
+                            child: PlayingBar(
+                              duration: currentSong.duration,
+                              artistName: currentSong.artist,
+                              musicName: currentSong.title,
+                              musicImg: currentSong.img,
+                            ),
+                          );
+                        },
+                      ),
+                      const PlayingBar(duration: 20), // Adjust duration as needed
                       BottomNavigationBar(
                         type: BottomNavigationBarType.fixed,
                         backgroundColor: blackLowOpacity,

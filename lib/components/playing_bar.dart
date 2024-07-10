@@ -1,4 +1,7 @@
 import 'dart:async';
+=======
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
@@ -16,6 +19,10 @@ class PlayingBar extends StatefulWidget {
     required this.songName,
     required this.artistName, // thêm tham số artistName
   });
+  final String musicName;
+  final String artistName;
+  final String musicImg;
+  const PlayingBar({super.key, required this.duration, required this.musicName, required this.artistName, required this.musicImg});
 
   @override
   State<PlayingBar> createState() => _PlayingBarState();
@@ -98,6 +105,18 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
     });
   }
 
+  // Hàm để tạo màu ngẫu nhiên tối hơn
+  Color _getRandomDarkColor() {
+    final Random random = Random();
+    const int maxColorValue = 150; // Giới hạn giá trị màu để tạo màu tối hơn
+    return Color.fromARGB(
+      255,
+      random.nextInt(maxColorValue),
+      random.nextInt(maxColorValue),
+      random.nextInt(maxColorValue),
+    );
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -121,7 +140,7 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: cyan,
+            color: _getRandomDarkColor(),
           ),
           child: Padding(
             padding: const EdgeInsets.only(top: 8),
@@ -139,6 +158,9 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: blueColor,
+                            image: DecorationImage(
+                              image: AssetImage(widget.musicImg)
+                            ),
                           ),
                         ),
                         Padding(
@@ -153,6 +175,23 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
                               Text(
                                 widget.artistName, // hiển thị tên nghệ sĩ
                                 style: changeTextColor(robotoRegular14, lightGrayColor),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.5, // Giới hạn chiều rộng
+                                child: Text(
+                                  widget.musicName,
+                                  style: changeTextColor(robotoBlack14, whiteColor),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.5, // Giới hạn chiều rộng
+                                child: Text(
+                                  widget.artistName,
+                                  style: changeTextColor(robotoRegular14, lightGrayColor),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
                               ),
                             ],
                           ),
@@ -165,6 +204,8 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
                         const SizedBox(width: 10),
                         const Icon(Icons.add_circle_outline_rounded, size: 30, color: lightGrayColor),
                         const SizedBox(width: 5),
+                        const Icon(Icons.add_circle_outline_rounded,
+                            size: 30, color: lightGrayColor),
                         GestureDetector(
                           onTap: () {
                             _togglePlayPause(MediaQuery.of(context).size.width - 40);

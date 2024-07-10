@@ -46,9 +46,19 @@ TextStyle robotoBold12 = TextStyle(
   fontSize: 12,
   color: color,
 );
+TextStyle robotoBold38 = TextStyle(
+  fontFamily: 'RobotoBoldFont',
+  fontSize: 38,
+  color: color,
+);
 
 
 //ROBOTO REGULAR FONT
+TextStyle robotoRegular38 = TextStyle(
+  fontFamily: 'RobotoRegularFont',
+  fontSize: 38,
+  color: color,
+);
 TextStyle robotoRegular24 = TextStyle(
   fontFamily: 'RobotoRegularFont',
   fontSize: 24,
@@ -92,6 +102,12 @@ TextStyle robotoRegular10 = TextStyle(
 
 
 //ROBOTO BLACK FONT
+TextStyle robotoBlack30 = TextStyle(
+  fontFamily: 'RobotoBlackFont',
+  fontSize: 36,
+  color: color,
+  fontWeight: FontWeight.bold
+);
 TextStyle robotoBlack24 = TextStyle(
   fontFamily: 'RobotoBlackFont',
   fontSize: 24,

@@ -50,6 +50,7 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
+                  builder: (context) => PlayListPage(title: items[index]['text']!, imagePlaylist: items[index]['image']!),
                   builder: (context) => PlayListPage(title: items[index]['text']!),
                 ),
               );
