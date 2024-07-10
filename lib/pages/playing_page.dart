@@ -416,93 +416,88 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
                       height: 10,
                     ),
                     //Lyrics
-                    GestureDetector(
-                      onTap: () {
-                        // Update BOTNAV visibility status
-                        VisibilitySettings.showBottomNavAndPlayingBar.value = false;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LyricsPage(
-                              musicName: widget.musicName,
-                              artist: widget.artist,
-                              duration: 150,
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 36),
-                        child: Container(
-                          padding: const EdgeInsets.all(13),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: lightCyanColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Bản xem trước lời bài hát',
-                                style:
-                                    changeTextColor(robotoBold18, whiteColor),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 36),
+                      child: Container(
+                        padding: const EdgeInsets.all(13),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: lightCyanColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Bản xem trước lời bài hát',
+                              style: changeTextColor(robotoBold18, whiteColor),
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            Text(
+                              'Hello? Anh thấy story em đăng\n\n' 'Nhạc lofi, đèn đom đóm và lại thút thít trong lớp chăn\n\n' 'Trong hàng vạn sự tình xảy ra, điều nào đủ nghiêm để khiến em đau?\n\n' 'Vì đằng sau con số trăm ngàn',
+                              style: changeTextColor(
+                                  robotoBold22.copyWith(height: 1), whiteColor),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.only(
+                                  top: 15, left: 15, right: 15, bottom: 5),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: darkCyanColor,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: lightCyanColor,
+                                      spreadRadius: 0,
+                                      blurRadius: 30,
+                                      offset: Offset(0, -35),
+                                    )
+                                  ]),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    'Có giới hạn số lượng lời bài hát mỗi tháng.',
+                                    style: changeTextColor(
+                                        robotoMedium135, whiteColor),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        minimumSize: const Size(115, 30),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => LyricsPage(
+                                              musicName: widget.musicName,
+                                              artist: widget.artist,
+                                              duration: 150,
+                                            ),
+                                            settings: const RouteSettings(
+                                                name: 'LyricsPage'),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        'Hiện lời bài hát',
+                                        style: changeTextColor(
+                                            robotoMedium135, blackColor),
+                                      )),
+                                ],
                               ),
-                              const SizedBox(
-                                height: 25,
-                              ),
-                              Text(
-                                'Hello? Anh thấy story em đăng\n\n'
-                                'Nhạc lofi, đèn đom đóm và lại thút thít trong lớp chăn\n\n'
-                                'Trong hàng vạn sự tình xảy ra, điều nào đủ nghiêm để khiến em đau?\n\n'
-                                'Vì đằng sau con số trăm ngàn',
-                                style: changeTextColor(
-                                    robotoBold22.copyWith(height: 1),
-                                    whiteColor),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.only(
-                                    top: 15, left: 15, right: 15, bottom: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: darkCyanColor,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: lightCyanColor,
-                                        spreadRadius: 0,
-                                        blurRadius: 30,
-                                        offset: Offset(0, -35),
-                                      )
-                                    ]),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Text(
-                                      'Có giới hạn số lượng lời bài hát mỗi tháng.',
-                                      style: changeTextColor(
-                                          robotoMedium135, whiteColor),
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          minimumSize: const Size(115, 30),
-                                        ),
-                                        onPressed: () {},
-                                        child: Text(
-                                          'Hiện lời bài hát',
-                                          style: changeTextColor(
-                                              robotoMedium135, blackColor),
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -514,90 +509,10 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
                           Navigator.push(
                             context, 
                             MaterialPageRoute(
-                              builder: (context) => const ArtistPage(artistName: 'Negav'),
+                              builder: (context) => const ArtistPage(artistName: 'Negav', artistImage: "h",),
                             )
                           );
                         },
-                        VisibilitySettings.showBottomNavAndPlayingBar.value = true;
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ArtistPage(artistName: 'Negav', artistImage: widget.image,),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 36),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: darkGray,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 220,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: const DecorationImage(
-                                      fit: BoxFit.fitHeight,
-                                      image: AssetImage(
-                                        'assets/images/bannerartist.png',
-                                      ))),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Negav',
-                                            style: changeTextColor(
-                                                robotoBold20, whiteColor),
-                                          ),
-                                          Text(
-                                            '513.1N người nghe hằng tiếng',
-                                            style: changeTextColor(
-                                                robotoRegular12,
-                                                lightGrayColor),
-                                          ),
-                                        ],
-                                      ),
-                                      OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            minimumSize: const Size(60, 25),
-                                          ),
-                                          onPressed: () {},
-                                          child: Text(
-                                            'Theo dõi',
-                                            style: changeTextColor(
-                                                robotoBlack12, whiteColor),
-                                          )),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    'sap noi tieng',
-                                    style: changeTextColor(
-                                        robotoMedium12, lightGrayColor),
-                                  ),
-                                ],
-                              ),
-                            )
-                        ).then((_) {
-                          VisibilitySettings.showBottomNavAndPlayingBar.value = false;
-                        });
-                      },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 36),
                         child: Container(
