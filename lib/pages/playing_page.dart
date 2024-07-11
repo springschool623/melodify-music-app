@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:melodify_app_project/components/visiblebotnavbar.dart';
+import 'package:melodify_app_project/pages/artist_page.dart';
 import 'package:melodify_app_project/pages/lyrics_page.dart';
 import 'package:melodify_app_project/stuff/background.dart';
 import 'package:melodify_app_project/stuff/color.dart';
@@ -57,7 +58,7 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
     //     VisibilitySettings.showBottomNavAndPlayingBar.value = false;
     //   }
     // });
-    // _someValueNotifier.addListener(_listener);
+    _someValueNotifier.addListener(_listener);
 
     //Just for playing bar
     _controller = AnimationController(
@@ -137,8 +138,8 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
     if (!_isDisposed) {
       // Hiển thị BottomNav và PlayingBar khi rời khỏi trang này
       // VisibilitySettings.showBottomNavAndPlayingBar.value = true;
-      // _someValueNotifier.removeListener(_listener);
-      // _someValueNotifier.dispose();
+      _someValueNotifier.removeListener(_listener);
+      _someValueNotifier.dispose();
 
       _controller.dispose();
       _timer.cancel();
@@ -503,77 +504,87 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
                     const SizedBox(
                       height: 10,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 36),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: darkGray,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 220,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: const DecorationImage(
-                                      fit: BoxFit.fitHeight,
-                                      image: AssetImage(
-                                        'assets/images/bannerartist.png',
-                                      ))),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Negav',
-                                            style: changeTextColor(
-                                                robotoBold20, whiteColor),
-                                          ),
-                                          Text(
-                                            '513.1N người nghe hằng tiếng',
-                                            style: changeTextColor(
-                                                robotoRegular12,
-                                                lightGrayColor),
-                                          ),
-                                        ],
-                                      ),
-                                      OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            minimumSize: const Size(60, 25),
-                                          ),
-                                          onPressed: () {},
-                                          child: Text(
-                                            'Theo dõi',
-                                            style: changeTextColor(
-                                                robotoBlack12, whiteColor),
-                                          )),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    'sap noi tieng',
-                                    style: changeTextColor(
-                                        robotoMedium12, lightGrayColor),
-                                  ),
-                                ],
-                              ),
+                    GestureDetector(
+                      onTap: () {
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: (context) => const ArtistPage(artistName: 'Negav', artistImage: "h",),
                             )
-                          ],
+                          );
+                        },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 36),
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: darkGray,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 220,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: const DecorationImage(
+                                        fit: BoxFit.fitHeight,
+                                        image: AssetImage(
+                                          'assets/images/bannerartist.png',
+                                        ))),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Negav',
+                                              style: changeTextColor(
+                                                  robotoBold20, whiteColor),
+                                            ),
+                                            Text(
+                                              '513.1N người nghe hằng tiếng',
+                                              style: changeTextColor(
+                                                  robotoRegular12,
+                                                  lightGrayColor),
+                                            ),
+                                          ],
+                                        ),
+                                        OutlinedButton(
+                                            style: OutlinedButton.styleFrom(
+                                              minimumSize: const Size(60, 25),
+                                            ),
+                                            onPressed: () {},
+                                            child: Text(
+                                              'Theo dõi',
+                                              style: changeTextColor(
+                                                  robotoBlack12, whiteColor),
+                                            )),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      'sap noi tieng',
+                                      style: changeTextColor(
+                                          robotoMedium12, lightGrayColor),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),

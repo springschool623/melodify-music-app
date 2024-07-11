@@ -12,6 +12,9 @@ dependencies:
   google_nav_bar: ^5.0.6
   font_awesome_flutter: ^10.3.0
   provider: ^5.0.0
+  spotify: ^0.13.7
+  youtube_explode_dart: ^2.2.1
+  audioplayers: ^6.0.0
 
 dev_dependencies:
   flutter_test:

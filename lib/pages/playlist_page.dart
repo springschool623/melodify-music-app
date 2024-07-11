@@ -1,15 +1,20 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/components/playing_bar.dart';
+import 'package:melodify_app_project/components/visible_playing_bar.dart';
 import 'package:melodify_app_project/components/visiblebotnavbar.dart';
 import 'package:melodify_app_project/pages/playing_page.dart';
 import 'package:melodify_app_project/stuff/background.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
+import 'package:provider/provider.dart';
 
 class PlayListPage extends StatefulWidget {
   final String title;
-  const PlayListPage({super.key, required this.title});
+  final String imagePlaylist;
+  const PlayListPage(
+      {super.key, required this.title, required this.imagePlaylist});
 
   @override
   State<PlayListPage> createState() => PlayListPageState();
@@ -114,7 +119,8 @@ class PlayListPageState extends State<PlayListPage> {
     {
       'imageLike': 'assets/images/like3.png',
       'likeName': 'Tiếng Hát Át Tiếng Ka',
-      'des': 'Ảnh bìa: say này bé thành ca sĩ nhưng thi thoảng diễn hài đỉnh cao'
+      'des':
+          'Ảnh bìa: say này bé thành ca sĩ nhưng thi thoảng diễn hài đỉnh cao'
     },
   ];
 
@@ -129,24 +135,21 @@ class PlayListPageState extends State<PlayListPage> {
               SliverPadding(
                 padding: const EdgeInsets.only(top: 10, left: 16, right: 16),
                 sliver: SliverAppBar(
-                  backgroundColor: transparent,
-                  title: Text(
-                    widget.title,
-                    style: changeTextColor(robotoBold20, whiteColor)
-                  ),
-                  centerTitle: true,
-                  titleSpacing: 15,
-                  leading: IconButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                      size: 40,
-                      color: whiteColor,
-                    ),
-                  )
-                ),
+                    backgroundColor: transparent,
+                    title: Text(widget.title,
+                        style: changeTextColor(robotoBold20, whiteColor)),
+                    centerTitle: true,
+                    titleSpacing: 15,
+                    leading: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_rounded,
+                        size: 30,
+                        color: whiteColor,
+                      ),
+                    )),
               ),
               SliverToBoxAdapter(
                 child: Column(
@@ -180,8 +183,8 @@ class PlayListPageState extends State<PlayListPage> {
                             ),
                             hintText: 'Tìm trong danh sách phát',
                             hintStyle: MaterialStateProperty.all<TextStyle>(
-                              changeTextColor(robotoRegular14, lightGrayColor)
-                            ),
+                                changeTextColor(
+                                    robotoRegular14, lightGrayColor)),
                           ),
                         ),
                         const SizedBox(
@@ -194,10 +197,9 @@ class PlayListPageState extends State<PlayListPage> {
                           decoration: BoxDecoration(
                               color: lightGrayColorLowOpacity,
                               borderRadius: BorderRadius.circular(5)),
-                          child: Text(
-                            'Sắp xếp',
-                            style: changeTextColor(robotoRegular14, lightGrayColor)
-                          ),
+                          child: Text('Sắp xếp',
+                              style: changeTextColor(
+                                  robotoRegular14, lightGrayColor)),
                         )
                       ],
                     ),
@@ -210,7 +212,7 @@ class PlayListPageState extends State<PlayListPage> {
                       height: 250,
                       alignment: Alignment.topCenter,
                       child: Image.asset(
-                        'assets/images/playlist1.png',
+                        widget.imagePlaylist,
                       ),
                     ),
                     const SizedBox(
@@ -221,10 +223,9 @@ class PlayListPageState extends State<PlayListPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Với HIEUTHUHAI, AMEE, PRT MCK và nhiều hơn nữa',
-                            style: changeTextColor(robotoMedium14, lightGrayColor)
-                          ),
+                          Text('Với HIEUTHUHAI, AMEE, PRT MCK và nhiều hơn nữa',
+                              style: changeTextColor(
+                                  robotoMedium14, lightGrayColor)),
                           const SizedBox(
                             height: 8,
                           ),
@@ -240,14 +241,12 @@ class PlayListPageState extends State<PlayListPage> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Text(
-                                'Dành riêng cho ',
-                                style: changeTextColor(robotoMedium14, lightGrayColor)
-                              ),
-                              Text(
-                                'Lê Nguyễn Gia Bảo',
-                                style: changeTextColor(robotoBold16, whiteColor)
-                              ),
+                              Text('Dành riêng cho ',
+                                  style: changeTextColor(
+                                      robotoMedium14, lightGrayColor)),
+                              Text('Lê Nguyễn Gia Bảo',
+                                  style: changeTextColor(
+                                      robotoBold16, whiteColor)),
                             ],
                           ),
                           const SizedBox(
@@ -255,10 +254,9 @@ class PlayListPageState extends State<PlayListPage> {
                           ),
                           Row(
                             children: [
-                              Text(
-                                '113 lượt lưu',
-                                style: changeTextColor(robotoMedium14, lightGrayColor)
-                              ),
+                              Text('113 lượt lưu',
+                                  style: changeTextColor(
+                                      robotoMedium14, lightGrayColor)),
                               Container(
                                 width: 4,
                                 height: 4,
@@ -266,14 +264,12 @@ class PlayListPageState extends State<PlayListPage> {
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 5),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: lightGrayColor
-                                ),
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: lightGrayColor),
                               ),
-                              Text(
-                                '3 giờ 0 phút',
-                                style: changeTextColor(robotoMedium14, lightGrayColor)
-                              ),
+                              Text('3 giờ 0 phút',
+                                  style: changeTextColor(
+                                      robotoMedium14, lightGrayColor)),
                             ],
                           ),
                         ],
@@ -289,31 +285,22 @@ class PlayListPageState extends State<PlayListPage> {
                             children: [
                               IconButton(
                                   onPressed: () {},
-                                  icon: Icon(
-                                    Icons.downloading,
-                                    size: 30,
-                                    color: lightGrayColor
-                                  )),
+                                  icon: Icon(Icons.downloading,
+                                      size: 30, color: lightGrayColor)),
                               const SizedBox(
                                 width: 10,
                               ),
                               IconButton(
                                   onPressed: () {},
-                                  icon: Icon(
-                                    Icons.control_point,
-                                    size: 30,
-                                    color: lightGrayColor
-                                  )),
+                                  icon: Icon(Icons.control_point,
+                                      size: 30, color: lightGrayColor)),
                               const SizedBox(
                                 width: 10,
                               ),
                               IconButton(
                                   onPressed: () {},
-                                  icon: Icon(
-                                    Icons.more_vert,
-                                    size: 30,
-                                    color: lightGrayColor
-                                  )),
+                                  icon: Icon(Icons.more_vert,
+                                      size: 30, color: lightGrayColor)),
                             ],
                           ),
                           const SizedBox(
@@ -350,33 +337,23 @@ class PlayListPageState extends State<PlayListPage> {
                       child: Column(
                         //Dùng ListView thì sẽ bị giới hạn chiều cao nên dùng Column có items.map sẽ ko cần lo bị giới hạn
                         children: items.map((item) {
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 15),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    // Update BOTNAV visibility status
-                                    VisibilitySettings.showBottomNavAndPlayingBar.value = false;
-                                    Navigator.push(
-                                      context, 
-                                      MaterialPageRoute(
-                                        builder: (context) => PlayingMusicPage(
-                                          musicName: item['musicName']!,
-                                          artist: item['artist']!,
-                                          image: item['image']!,
-                                          playListTitle: widget.title,
-                                          duration: 100,
-                                        ),
-                                        settings: RouteSettings(name: 'PlayingMusicPage'),
-                                      )
-                                    ).then((_) {
-                                      // Restore visibility status when returning
-                                      VisibilitySettings.showBottomNavAndPlayingBar.value = true;
-                                    });
-                                  },
-                                  child: Container(
+                          return InkWell(
+                            onTap: () {
+                              Provider.of<CurrentPlayingSong>(context,
+                                      listen: false)
+                                  .updateSong(
+                                item['musicName']!,
+                                item['artist']!,
+                                item['image']!,
+                                100, // Đặt thời lượng cần thiết
+                              );
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 15),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
                                     width: 50,
                                     height: 50,
                                     decoration: BoxDecoration(
@@ -386,40 +363,41 @@ class PlayListPageState extends State<PlayListPage> {
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  flex: 6,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        item['musicName']!,
-                                        style: changeTextColor(robotoBold16, whiteColor),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ),
-                                      Text(
-                                        item['artist']!,
-                                        style: changeTextColor(robotoMedium14, lightGrayColor)
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Spacer(),
-                                Expanded(
-                                  flex: 1,
-                                  child: IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.more_vert,
-                                      color: lightGrayColor,
-                                      size: 26,
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    flex: 6,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          item['musicName']!,
+                                          style: changeTextColor(
+                                              robotoBold16, whiteColor),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                        Text(item['artist']!,
+                                            style: changeTextColor(
+                                                robotoMedium14,
+                                                lightGrayColor)),
+                                      ],
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Spacer(),
+                                  Expanded(
+                                    flex: 1,
+                                    child: IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.more_vert,
+                                        color: lightGrayColor,
+                                        size: 26,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         }).toList(),
@@ -433,19 +411,21 @@ class PlayListPageState extends State<PlayListPage> {
                         style: changeTextColor(robotoBold20, whiteColor),
                       ),
                     ),
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 16),
                       height: 495,
                       child: GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
+                          physics: NeverScrollableScrollPhysics(),
                           padding: const EdgeInsets.all(0),
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 28,
-                            mainAxisSpacing: 20,
-                            mainAxisExtent: 238
-                          ),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 28,
+                                  mainAxisSpacing: 20,
+                                  mainAxisExtent: 238),
                           itemCount: itemsLikes.length,
                           itemBuilder: (context, index) {
                             final itemLike = itemsLikes[index];
@@ -458,22 +438,27 @@ class PlayListPageState extends State<PlayListPage> {
                                       height: 175,
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: AssetImage(itemLike['imageLike']!),
+                                          fit: BoxFit.cover,
+                                          image: AssetImage(
+                                              itemLike['imageLike']!),
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 5,),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
                                     Text(
                                       itemLike['likeName']!,
-                                      style: changeTextColor(robotoBold14, whiteColor),
+                                      style: changeTextColor(
+                                          robotoBold14, whiteColor),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,
                                     ),
                                     Text(
                                       itemLike['des']!,
-                                      style: changeTextColor(robotoMedium135, lightGrayColor),
+                                      style: changeTextColor(
+                                          robotoMedium135, lightGrayColor),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,
@@ -482,8 +467,7 @@ class PlayListPageState extends State<PlayListPage> {
                                 ),
                               ),
                             );
-                          }
-                        ),
+                          }),
                     ),
 
                     const SizedBox(
