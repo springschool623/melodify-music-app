@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
@@ -8,13 +9,15 @@ class PlayingBar extends StatefulWidget {
   final Function(bool isPlaying) onPlayPause;
   final String songName;
   final String artistName; // thêm tham số artistName
+  final String musicImg;
 
   const PlayingBar({
     super.key,
     required this.duration,
     required this.onPlayPause,
     required this.songName,
-    required this.artistName, // thêm tham số artistName
+    required this.artistName,
+    required this.musicImg // thêm tham số artistName
   });
 
   @override
@@ -28,6 +31,7 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
   double _currentValue = 0;
   late Timer _timer;
   int _elapsedSeconds = 0;
+  late Color _selectedColor;
 
   @override
   void initState() {
@@ -45,8 +49,30 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
         }
       });
 
+    // Chọn màu ngẫu nhiên cho bài nhạc
+    _selectedColor = _getRandomDarkColor();
+
+
     // Khởi tạo _widthAnimation với một giá trị mặc định
     _widthAnimation = Tween<double>(begin: 0, end: 0).animate(_controller);
+  }
+
+  
+  //Update màu sắc khi bấm sang nhạc khác
+  @override
+  void didUpdateWidget(PlayingBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.songName != widget.songName ||
+        oldWidget.artistName != widget.artistName ||
+        oldWidget.musicImg != widget.musicImg) {
+      setState(() {
+        _selectedColor = _getRandomDarkColor();
+        _controller.reset();
+        _widthAnimation = Tween<double>(begin: 0, end: MediaQuery.of(context).size.width - 40).animate(_controller);
+        _isPlaying = false;
+        _currentValue = 0;
+      });
+    }
   }
 
   void _togglePlayPause(double maxWidth) {
@@ -105,6 +131,18 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
     super.dispose();
   }
 
+  // Hàm để tạo màu ngẫu nhiên tối hơn
+  Color _getRandomDarkColor() {
+    final Random random = Random();
+    const int maxColorValue = 150; // Giới hạn giá trị màu để tạo màu tối hơn
+    return Color.fromARGB(
+      255,
+      random.nextInt(maxColorValue),
+      random.nextInt(maxColorValue),
+      random.nextInt(maxColorValue),
+    );
+  }
+
   String _formatDuration(int seconds) {
     final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
     final remainingSeconds = (seconds % 60).toString().padLeft(2, '0');
@@ -121,7 +159,7 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: cyan,
+            color: _selectedColor,
           ),
           child: Padding(
             padding: const EdgeInsets.only(top: 8),
@@ -138,7 +176,9 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
                           width: 40,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: blueColor,
+                            image: DecorationImage(
+                              image: NetworkImage(widget.musicImg)
+                            ),
                           ),
                         ),
                         Padding(
