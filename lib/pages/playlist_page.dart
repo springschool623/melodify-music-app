@@ -339,6 +339,7 @@ class PlayListPageState extends State<PlayListPage> {
                         children: items.map((item) {
                           return InkWell(
                             onTap: () {
+                              print('InkWell onTap${item['musicName']!}');
                               Provider.of<CurrentPlayingSong>(context,
                                       listen: false)
                                   .updateSong(

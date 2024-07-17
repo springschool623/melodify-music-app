@@ -3,6 +3,9 @@ import 'package:melodify_app_project/components/visiblebotnavbar.dart';
 import 'package:melodify_app_project/pages/playlist_page.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
+import 'package:spotify/spotify.dart' as spotify;
+
+import '../conf/const.dart';
 
 class RecentPlayListGridView extends StatefulWidget {
   const RecentPlayListGridView({super.key});
@@ -12,24 +15,40 @@ class RecentPlayListGridView extends StatefulWidget {
 }
 
 class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
-  final List<Map<String, String>> items = [
-    {'image': 'assets/images/mix1.png', 'text': 'Negav Radio'},
-    {'image': 'assets/images/mix2.png', 'text': 'Tuyển tập nhạc buồn'},
-    {'image': 'assets/images/mix3.png', 'text': 'Daily Mix 2'},
-    {'image': 'assets/images/mix4.png', 'text': 'Daily Mix 1'},
-    {'image': 'assets/images/mix5.png', 'text': 'Daily Mix 6'},
-    {'image': 'assets/images/mix6.png', 'text': 'Thoải Mái Gác Chân Lên'},
-    {'image': 'assets/images/mix7.png', 'text': 'Orange Radio'},
-    {'image': 'assets/images/mix8.png', 'text': 'Buitruonglinh'},
-  ];
+  List<Map<String, String>> items = [];
   int? selectedIndex;
 
   @override
+  void initState() {
+    super.initState();
+    fetchAlbums();
+  }
+
+  Future<void> fetchAlbums() async {
+    final credentials = spotify.SpotifyApiCredentials(CustomString.clientId, CustomString.clientSecret);
+    final spotifyApi = spotify.SpotifyApi(credentials);
+
+    try {
+      final newReleases = await spotifyApi.browse.newReleases().all();
+      setState(() {
+        items = newReleases.map((album) {
+          return {
+            'image': album.images?.first.url ?? '',
+            'text': album.name ?? 'Unknown Album',
+          };
+        }).toList();
+      });
+    } catch (e) {
+      print('Error fetching albums: $e');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final double totalHeight = (items.length * 22) + ((items.length - 1) * 15);
+    // final double totalHeight = (items.length * 22) + ((items.length - 1) * 15);
 
     return SizedBox(
-      height: totalHeight,
+      height: 1000,
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
@@ -64,11 +83,12 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(5),
-                        bottomLeft: Radius.circular(5)),
-                      child: Image.asset(
+                          topLeft: Radius.circular(5),
+                          bottomLeft: Radius.circular(5)),
+                      child: Image.network(
                         items[index]['image']!,
                         height: 60,
+                        fit: BoxFit.cover,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -99,4 +119,3 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
     );
   }
 }
-

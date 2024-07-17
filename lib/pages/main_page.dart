@@ -32,7 +32,8 @@ class _MainPageState extends State<MainPage> {
   final player = AudioPlayer();
   Duration? songDuration;
   String songName = "";
-  String artistName = ""; // thêm biến artistName
+  String artistName = "";
+  String songImg = "";
   String? audioUrl;
   PlayerState playerState = PlayerState.completed;
   bool isLoading = true;
@@ -50,7 +51,7 @@ class _MainPageState extends State<MainPage> {
     const SearchPage(),
     const LibraryPage(),
     const PremiumPage(),
-    const PersonnalPage(),
+    const PersonalPage(),
   ];
 
   final ValueNotifier<int> _myValueNotifier = ValueNotifier<int>(0);
@@ -89,7 +90,8 @@ class _MainPageState extends State<MainPage> {
 
       final track = await trackFuture;
       songName = track.name ?? "";
-      artistName = track.artists?.first.name ?? ""; // lấy tên nghệ sĩ
+      artistName = track.artists?.first.name ?? "";
+      songImg = track.album?.images?.first.url ?? ""; // Get song image
 
       if (songName.isNotEmpty) {
         final video = (await yt.search.search(songName)).first;
@@ -137,9 +139,8 @@ class _MainPageState extends State<MainPage> {
 
   void playAudio() {
     if (audioUrl != null && isPrepared && !isLoading) {
-      print("Playing audio.");
+      print(songImg);
       player.resume();
-      print("Current playback rate: $playbackRate");
     }
   }
 
@@ -209,7 +210,8 @@ class _MainPageState extends State<MainPage> {
                                 }
                               },
                               songName: songName,
-                              artistName: artistName, // truyền artistName vào PlayingBar
+                              artistName: artistName,
+                              musicImg: songImg, // pass songImg to PlayingBar
                             ),
                       BottomNavigationBar(
                         type: BottomNavigationBarType.fixed,
