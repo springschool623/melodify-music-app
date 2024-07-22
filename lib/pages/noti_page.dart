@@ -12,32 +12,46 @@ class NewReleasesPage extends StatefulWidget {
 class _NewReleasesPageState extends State<NewReleasesPage> {
   List<Map<String, String>> items = [
     {
-      'musicName': 'Không Gian Vàng',
-      'artist': 'Miu Lê',
+      'musicName': 'sao trông em lại như thế này',
+      'artist': 'Negav',
       'image': 'assets/images/music1.png',
       'date': '1 ngày trước',
-      'status': 'Mới',
+      'type': 'Đĩa đơn',
     },
     {
       'musicName': 'Anh Chỉ Là Người Thay Thế',
       'artist': 'Mr.Siro',
-      'image': 'assets/images/music1.png',
+      'image': 'assets/images/anhchilanguoithaythe.jfif',
       'date': '28 tháng 5',
-      'status': 'Đã xem',
+      'type': 'Đĩa đơn',
     },
     {
       'musicName': 'Sau Lời Từ Khước (Live)',
       'artist': 'Mỹ Tâm',
-      'image': 'assets/images/music1.png',
+      'image': 'assets/images/sauloitukhuoc.jfif',
       'date': '27 tháng 5',
-      'status': 'Đã xem',
+      'type': 'Đĩa đơn',
     },
     {
       'musicName': 'Algorhythm',
       'artist': 'ITZY',
-      'image': 'assets/images/music1.png',
+      'image': 'assets/images/cateimg/algorhythm.jfif',
       'date': '15 tháng 5',
-      'status': 'Đã xem',
+      'type': 'Album',
+    },
+    {
+      'musicName': 'Love Yourself 轉 Tear',
+      'artist': 'ITZY',
+      'image': 'assets/images/cateimg/loveyourself.jfif',
+      'date': '21 tháng 5',
+      'type': 'Album',
+    },
+    {
+      'musicName': 'Không Gian Vắng',
+      'artist': 'Miu Lê',
+      'image': 'assets/images/khonggianvang.jfif',
+      'date': '6 tháng 6',
+      'type': 'Đĩa đơn',
     },
   ];
 
@@ -64,7 +78,8 @@ class _NewReleasesPageState extends State<NewReleasesPage> {
           final musicNameLower = item['musicName']!.toLowerCase();
           final artistLower = item['artist']!.toLowerCase();
           final searchLower = query.toLowerCase();
-          return musicNameLower.contains(searchLower) || artistLower.contains(searchLower);
+          return musicNameLower.contains(searchLower) ||
+              artistLower.contains(searchLower);
         }).toList();
       });
     }
@@ -90,13 +105,9 @@ class _NewReleasesPageState extends State<NewReleasesPage> {
           CustomScrollView(
             slivers: [
               SliverPadding(
-                padding: const EdgeInsets.only(top: 10, left: 16, right: 16),
+                padding: const EdgeInsets.only(top: 10, left: 0, right: 0),
                 sliver: SliverAppBar(
                   backgroundColor: transparent,
-                  title: Text(
-                    'Thông tin mới',
-                    style: changeTextColor(robotoBold20, whiteColor),
-                  ),
                   centerTitle: true,
                   titleSpacing: 15,
                   leading: IconButton(
@@ -105,7 +116,7 @@ class _NewReleasesPageState extends State<NewReleasesPage> {
                     },
                     icon: const Icon(
                       Icons.arrow_back,
-                      size: 40,
+                      size: 30,
                       color: whiteColor,
                     ),
                   ),
@@ -123,118 +134,143 @@ class _NewReleasesPageState extends State<NewReleasesPage> {
                         children: [
                           Text(
                             'Bản phát hành mới',
-                            style: changeTextColor(robotoBold16, whiteColor),
+                            style: changeTextColor(robotoBold28, whiteColor),
                           ),
                           const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              const SizedBox(width: 1),
-                              Text(
-                                'Nội dung phát hành mới nhất từ nghệ sĩ, podcast và chương trình bạn theo dõi',
-                                style: changeTextColor(robotoMedium12, lightGrayColor),
-                              ),
-                            ],
+                          Text(
+                            'Nội dung phát hành mới nhất từ nghệ sĩ, podcast và chương trình bạn theo dõi',
+                            style:
+                                changeTextColor(robotoMedium12, lightGrayColor),
+                            maxLines: 2,
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 20),
                     Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 16),
-                      child: Column(
-                        children: items.map((item) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item['status']!,
-                                style: changeTextColor(robotoBold16, whiteColor),
-                              ),
-                              const SizedBox(height: 10),
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 10),
-                                decoration: BoxDecoration(
-                                  color: blueColor.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: 80,
-                                      height: 80,
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                        ),
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage(item['image']!),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        'Mới',
+                        style: changeTextColor(robotoBold20, whiteColor),
+                      ),
+                    ),
+                    Column(
+                      children: items.map((item) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 10),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(item['image']!),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      flex: 6,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        flex: 6,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              item['date']!,
+                                              style: changeTextColor(
+                                                  robotoMedium12,
+                                                  lightGrayColor),
+                                            ),
+                                            const SizedBox(height: 6),
+                                            Text(
+                                              item['musicName']!,
+                                              style: changeTextColor(
+                                                  robotoBold16, whiteColor),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              item['artist']!,
+                                              style: changeTextColor(
+                                                  robotoMedium14,
+                                                  lightGrayColor),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    item['type']!,
+                                    style: changeTextColor(robotoRegular12, lightGrayColor),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
                                         children: [
-                                          Text(
-                                            item['date']!,
-                                            style: changeTextColor(robotoMedium12, lightGrayColor),
+                                          IconButton(
+                                            padding: const EdgeInsets.all(0),
+                                            alignment: Alignment.centerLeft,
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                              Icons.control_point,
+                                              color: whiteColor,
+                                              size: 30,
+                                            ),
                                           ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            item['musicName']!,
-                                            style: changeTextColor(robotoBold16, whiteColor),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                          Text(
-                                            item['artist']!,
-                                            style: changeTextColor(robotoMedium14, lightGrayColor),
+                                          IconButton(
+                                            padding: const EdgeInsets.all(0),
+                                            alignment: Alignment.centerLeft,
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                              Icons.more_vert,
+                                              color: whiteColor,
+                                              size: 30,
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                        Icons.control_point,
-                                        color: whiteColor,
-                                        size: 30,
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.play_circle,
+                                          color: whiteColor,
+                                          size: 40,
+                                        ),
                                       ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                        Icons.more_vert,
-                                        color: whiteColor,
-                                        size: 30,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                        Icons.play_circle,
-                                        color: whiteColor,
-                                        size: 30,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                    ],
+                                  )
+                                ],
                               ),
-                              const Divider(
-                                color: lightGrayColor,
-                                height: 1,
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
+                            ),
+                            const Divider(
+                              color: lightGreyLowOpacity,
+                              height: 1,
+                            ),
+                            const SizedBox(height: 10,)
+                          ],
+                        );
+                      }).toList(),
                     ),
-                    const SizedBox(height: 150),
+                    const SizedBox(height: 120),
                   ],
                 ),
               ),

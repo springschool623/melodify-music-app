@@ -1,4 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:melodify_app_project/components/grid_recent.dart';
 import 'package:melodify_app_project/components/list_collection_artist.dart';
 import 'package:melodify_app_project/components/list_fav_artist.dart';
@@ -16,52 +20,167 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  Color hexToColor(String hex) {
+    hex = hex.replaceAll('#', '');
+    if (hex.length == 6) {
+      hex = 'FF$hex'; // add the alpha value if not present
+    }
+    return Color(int.parse(hex, radix: 16));
+  }
+
+  List<Map<String, String>> items = [
+    {
+      'image': 'assets/images/cateimg/nhac.jfif',
+      'cateName': 'Nhạc',
+      'color': '#8FEDDD',
+    },
+    {
+      'image': 'assets/images/cateimg/moiphathanh.jfif',
+      'cateName': 'Mới phát hành',
+      'color': '#006450',
+    },
+    {
+      'image': 'assets/images/cateimg/kpop.jfif',
+      'cateName': 'K-Pop',
+      'color': '#1E3264',
+    },
+    {
+      'image': 'assets/images/cateimg/nhacviet.jfif',
+      'cateName': 'Nhạc Việt',
+      'color': '#8400E7',
+    },
+    {
+      'image': 'assets/images/cateimg/rap.jfif',
+      'cateName': 'Rap',
+      'color': '#E61E32',
+    },
+    {
+      'image': 'assets/images/cateimg/randb.jfif',
+      'cateName': 'R&B',
+      'color': '#477D95',
+    },
+    {
+      'image': 'assets/images/cateimg/indie.jfif',
+      'cateName': 'Indie',
+      'color': '#608108',
+    },
+    {
+      'image': 'assets/images/cateimg/lofi.jfif',
+      'cateName': 'LO-FI',
+      'color': '#503750',
+    },
+    {
+      'image': 'assets/images/cateimg/tinhyeu.jfif',
+      'cateName': 'Tình yêu',
+      'color': '#FF0090',
+    },
+    {
+      'image': 'assets/images/cateimg/thugian.jfif',
+      'cateName': 'Thư giãn',
+      'color': '#BA5D07',
+    },
+    {
+      'image': 'assets/images/cateimg/tiectung.jfif',
+      'cateName': 'Tiệc tùng',
+      'color': '#B06239',
+    },
+    {
+      'image': 'assets/images/cateimg/anime.jfif',
+      'cateName': 'Anime',
+      'color': '#148A08',
+    },
+    {
+      'image': 'assets/images/cateimg/ngungon.jfif',
+      'cateName': 'Ngủ ngon',
+      'color': '#503750',
+    },
+    {
+      'image': 'assets/images/cateimg/dance.jfif',
+      'cateName': 'Dance/Điện tử',
+      'color': '#537AA1',
+    },
+    {
+      'image': 'assets/images/cateimg/game.jfif',
+      'cateName': 'Chơi game',
+      'color': '#E8115B',
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: TextField(
-          decoration: InputDecoration(
-            hintText: 'Bạn muốn nghe gì?',
-            prefixIcon: const Icon(Icons.search, color: Colors.white),
-            hintStyle: const TextStyle(color: Colors.white),
-            filled: true,
-            fillColor: Colors.blue,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-          ),
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
       body: CustomScrollView(
         slivers: [
-          const SliverPadding(
-            padding: EdgeInsets.only(top: 25, left: 16, right: 16),
+          SliverPadding(
+            padding: const EdgeInsets.only(top: 25, left: 16, right: 16),
             sliver: SliverAppBar(
-              backgroundColor: Colors.transparent,
+              backgroundColor: transparent,
+              title: Text(
+                'Tìm kiếm',
+                style: changeTextColor(robotoBold24, whiteColor),
+              ),
               titleSpacing: 15,
-              leading: Padding(
+              leading: const Padding(
                 padding: EdgeInsets.all(2.0),
                 child: CircleAvatar(
                   backgroundImage: AssetImage('assets/images/logotest.jpg'),
                 ),
               ),
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: FaIcon(
+                    FontAwesomeIcons.camera,
+                    color: whiteColor,
+                    size: 24,
+                  ),
+                ),
+              ],
             ),
           ),
           SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFormField(
+                    style: changeTextColor(robotoBold16, darkGray),
+                    decoration: InputDecoration(
+                      hintText: 'Bạn muốn nghe gì?',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1.5,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1.5,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      prefixIcon: Icon(
+                        Icons.search_sharp,
+                        color: blackColor,
+                        size: 30,
+                      ),
+                      filled: true,
+                      fillColor: whiteColor,
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 22,
+                  ),
+                  Text(
                     'Duyệt tìm tất cả',
                     style: TextStyle(
                       fontSize: 22,
@@ -69,76 +188,75 @@ class _SearchPageState extends State<SearchPage> {
                       color: Colors.white,
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    shrinkWrap: true,
-                    childAspectRatio: 2, // Adjust this to make the cards rectangular
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      _buildCategoryCard('Nhạc', Colors.purple, context),
-                      _buildCategoryCard('Podcasts', Colors.green, context),
-                      _buildCategoryCard('Dành cho bạn', Colors.orange, context),
-                      _buildCategoryCard('Mới phát hành', Colors.lightGreen, context),
-                      _buildCategoryCard('Nhạc Việt', Colors.pink, context),
-                      _buildCategoryCard('K-Pop', Colors.red, context),
-                      _buildCategoryCard('Cổ điển', Colors.yellow, context),
-                      _buildCategoryCard('Jazz', Colors.lime, context),
-                      _buildCategoryCard('Nhạc sĩ', Colors.redAccent, context),
-                      _buildCategoryCard('Mùa hè', Colors.red, context),
-                      _buildCategoryCard('R&B', Colors.brown, context),
-                      _buildCategoryCard('Rap', Colors.grey, context),
-                      _buildCategoryCard('Bảng xếp hạng', Colors.blue, context),
-                      _buildCategoryCard('Karaoke', Colors.teal, context),
-                      _buildCategoryCard('Indie', Colors.deepPurple, context),
-                      _buildCategoryCard('Thư giãn', Colors.cyan, context),
-                      _buildCategoryCard('LO-FI', Colors.yellow, context),
-                      _buildCategoryCard('Tình yêu', Colors.pinkAccent, context),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 2),
-              ],
+                ],
+              ),
             ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 15,
+                mainAxisExtent: 90,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: hexToColor(items[index]['color']!),
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            bottom: -1,
+                            right: -12,
+                            child: Transform.rotate(
+                              angle: 0.4, // Góc xoay (radians)
+                              child: Container(
+                                height: 75,
+                                width: 75,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      items[index]['image']!,
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 10,
+                            left: 8,
+                            child: Container(
+                              width: 100, // Set the desired width
+                              child: Text(
+                                items[index]['cateName']!,
+                                style: changeTextColor(robotoBold18, whiteColor),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                childCount: items.length,
+              ),
+            ),
+          ),
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 150),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildCategoryCard(String title, Color color, BuildContext context) {
-    return InkWell(
-      onTap: () {
-        if (title == 'Nhạc') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MusicPage()),
-          );
-        } else {
-          // Handle other categories if needed
-          print('Tapped on $title');
-        }
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Center(
-          child: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontFamily: 'RobotoBoldFont',
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
       ),
     );
   }
