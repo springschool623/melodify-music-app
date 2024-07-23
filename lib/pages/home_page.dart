@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:melodify_app_project/components/grid_recent.dart';
 import 'package:melodify_app_project/components/list_collection_artist.dart';
 import 'package:melodify_app_project/components/list_fav_artist.dart';
@@ -62,11 +63,19 @@ class _HomePageState extends State<HomePage> {
               actions: [
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.notifications, color: whiteColor),
+                  icon: FaIcon(
+                    FontAwesomeIcons.solidBell, 
+                    color: whiteColor, 
+                    size: 24,
+                  ),
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.settings, color: whiteColor),
+                  icon: FaIcon(
+                    FontAwesomeIcons.gear, 
+                    color: whiteColor, 
+                    size: 24,
+                  ),
                 ),
               ],
             ),

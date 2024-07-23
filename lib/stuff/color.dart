@@ -18,3 +18,4 @@ const Color darkCyanColor = Color.fromRGBO(39, 138, 152, 1);
 const Color facebookBlueColor = Color.fromRGBO(23, 71, 157, 1);
 const Color lightGrey = Color.fromRGBO(165, 165, 165, 1);
 const Color lighterGrey = Color.fromRGBO(228, 228, 228, 1);
+const Color darkGrayColor = Color.fromRGBO(36, 36, 36, 1);
