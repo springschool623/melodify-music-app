@@ -199,8 +199,8 @@ class _LibraryPageState extends State<LibraryPage> {
                                 children: [
                                   Text(
                                     item['name']!,
-                                    style: changeTextColor(
-                                        robotoBold16, whiteColor),
+                                    style: changeTextColor(robotoBold16, whiteColor),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                   const SizedBox(
                                     height: 5,
@@ -213,6 +213,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                               style: changeTextColor(
                                                   robotoMedium14,
                                                   lightGrayColor),
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                             Container(
                                               width: 4,
@@ -225,11 +226,15 @@ class _LibraryPageState extends State<LibraryPage> {
                                                       BorderRadius.circular(50),
                                                   color: lightGrayColor),
                                             ),
-                                            Text(
-                                              item['des1']!,
-                                              style: changeTextColor(
-                                                  robotoMedium14,
-                                                  lightGrayColor),
+                                            Container(
+                                              width: 170,
+                                              child: Text(
+                                                item['des1']!,
+                                                style: changeTextColor(
+                                                    robotoMedium14,
+                                                    lightGrayColor),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
                                           ],
                                         )
