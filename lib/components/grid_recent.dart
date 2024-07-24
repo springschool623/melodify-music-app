@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:melodify_app_project/components/visiblebotnavbar.dart';
 import 'package:melodify_app_project/pages/playlist_page.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
@@ -16,6 +15,7 @@ class RecentPlayListGridView extends StatefulWidget {
 
 class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
   List<Map<String, String>> items = [];
+  List<String> albumIds = ['0i3IirLVHTlg7JqMvv45tE', '4faMbTZifuYsBllYHZsFKJ', '1vi1WySkgPGkbR8NnQzlXu', '0J9ZJ2vnTHm4NpzKVE779w', '5tlCVkYaDAmAtJ5YxejpWi', '0LM9Cm43Sug8Hfpm84qmt6'];
   int? selectedIndex;
 
   @override
@@ -29,10 +29,11 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
     final spotifyApi = spotify.SpotifyApi(credentials);
 
     try {
-      final newReleases = await spotifyApi.browse.newReleases().all();
+      final albums = await spotifyApi.albums.list(albumIds);
       setState(() {
-        items = newReleases.map((album) {
+        items = albums.map((album) {
           return {
+            'id': album.id!,
             'image': album.images?.first.url ?? '',
             'text': album.name ?? 'Unknown Album',
           };
@@ -43,79 +44,90 @@ class _RecentPlayListGridViewState extends State<RecentPlayListGridView> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    // final double totalHeight = (items.length * 22) + ((items.length - 1) * 15);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const double itemHeight = 60 + 15; // Item height + main axis spacing
+        final int rowCount = (items.length / 2).ceil();
+        final double gridViewHeight = itemHeight * rowCount;
 
-    return SizedBox(
-      height: 1000,
-      child: GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.zero,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 15,
-          childAspectRatio: 22 / 7,
-        ),
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                selectedIndex = index;
-              });
+        return SizedBox(
+          height: gridViewHeight,
+          child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 15,
+              childAspectRatio: 22 / 7,
+            ),
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedIndex = index;
+                  });
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PlayListPage(title: items[index]['text']!, imagePlaylist: items[index]['image']!),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PlayListPage(
+                        title: items[index]['text']!,
+                        imagePlaylist: items[index]['image']!,
+                        albumId: items[index]['id']!,
+                      ),
+                    ),
+                  );
+                },
+                child: GridTile(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: darkGray,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(5),
+                              bottomLeft: Radius.circular(5)),
+                          child: Image.network(
+                            items[index]['image']!,
+                            height: 60,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            items[index]['text']!,
+                            style: changeTextColor(robotoBold12, whiteColor),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
+                        ),
+                        if (selectedIndex == index)
+                          const Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(
+                              Icons.more_horiz_outlined,
+                              color: blueColor,
+                              size: 16,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               );
             },
-            child: GridTile(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: darkGray,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          bottomLeft: Radius.circular(5)),
-                      child: Image.network(
-                        items[index]['image']!,
-                        height: 60,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        items[index]['text']!,
-                        style: changeTextColor(robotoBold12, whiteColor),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                    ),
-                    if (selectedIndex == index)
-                      const Padding(
-                        padding: EdgeInsets.only(right: 10),
-                        child: Icon(
-                          Icons.more_horiz_outlined,
-                          color: blueColor,
-                          size: 16,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

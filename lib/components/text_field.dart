@@ -7,7 +7,14 @@ import 'package:melodify_app_project/stuff/same_using.dart';
 class CustomTextField extends StatefulWidget {
   final String text;
   final String icon;
-  const CustomTextField({super.key, required this.text, required this.icon});
+  final TextEditingController controller; // Thêm controller
+
+  const CustomTextField({
+    super.key, 
+    required this.text, 
+    required this.icon,
+    required this.controller, // Nhận controller
+  });
 
   @override
   State<CustomTextField> createState() => CustomTextFieldState();
@@ -15,7 +22,6 @@ class CustomTextField extends StatefulWidget {
 
 class CustomTextFieldState extends State<CustomTextField> {
   final FocusNode _focusNode = FocusNode();
-  final TextEditingController _controller = TextEditingController();
 
   // Map để ánh xạ tên icon với các icon từ Icons
   static const Map<String, IconData> _iconMap = {
@@ -29,7 +35,6 @@ class CustomTextFieldState extends State<CustomTextField> {
   @override
   void dispose() {
     _focusNode.dispose();
-    _controller.dispose();
     super.dispose();
   }
 
@@ -42,7 +47,7 @@ class CustomTextFieldState extends State<CustomTextField> {
     );
     if (selected != null) {
       setState(() {
-        _controller.text = "${selected.toLocal()}".split(' ')[0]; // Format date as you like
+        widget.controller.text = "${selected.toLocal()}".split(' ')[0]; // Format date as you like
       });
     }
   }
@@ -55,7 +60,7 @@ class CustomTextFieldState extends State<CustomTextField> {
         setState(() {}); // Trigger a rebuild when focus changes
       },
       child: TextFormField(
-        controller: widget.icon == 'birthday' ? _controller : null,
+        controller: widget.controller,
         style: changeTextColor(robotoMedium18, whiteColor),
         decoration: InputDecoration(
           labelText: widget.text,

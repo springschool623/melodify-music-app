@@ -1,6 +1,10 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/components/audio_provider.dart';
+import 'package:melodify_app_project/components/track_provider.dart';
+import 'package:melodify_app_project/components/visible_playing_bar.dart';
 import 'package:melodify_app_project/conf/const.dart';
+import 'package:provider/provider.dart';
 import 'package:spotify/spotify.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'dart:async';
@@ -28,7 +32,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
-  String musicTrackId = "7J8AUbvYoToCvGRQeSXBx7";
+  String musicTrackId = "";
   final player = AudioPlayer();
   Duration? songDuration;
   String songName = "";
@@ -59,7 +63,6 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    fetchTrack();
     player.onPlayerStateChanged.listen((state) {
       setState(() {
         playerState = state;
@@ -72,11 +75,26 @@ class _MainPageState extends State<MainPage> {
   void dispose() {
     _myValueNotifier.removeListener(_listener);
     _myValueNotifier.dispose();
-    player.dispose(); // Dispose of the audio player
+    player.dispose();
     super.dispose();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final trackProvider = Provider.of<TrackProvider>(context);
+    if (trackProvider.trackId != musicTrackId) {
+      setState(() {
+        musicTrackId = trackProvider.trackId ?? "";
+      });
+      fetchTrack();
+      print('fetchTrack');
+    }
+  }
+
   Future<void> fetchTrack() async {
+    if (musicTrackId.isEmpty) return;
+
     try {
       setState(() {
         isLoading = true;
@@ -113,9 +131,9 @@ class _MainPageState extends State<MainPage> {
           audioUrl = cachedFile.path;
           isCached = true;
         }
-
         await player.setPlaybackRate(playbackRate);
         await player.setSourceUrl(audioUrl!);
+        Provider.of<AudioProvider>(context, listen: false).setAudioURL(audioUrl!);
         isPrepared = true;
 
         print("Audio URL fetched and set.");
@@ -135,6 +153,10 @@ class _MainPageState extends State<MainPage> {
 
   void pauseAudio() {
     player.pause();
+  }
+
+  void stopAudio() {
+    player.stop();
   }
 
   void playAudio() {
@@ -198,21 +220,28 @@ class _MainPageState extends State<MainPage> {
                   right: 0,
                   child: Column(
                     children: [
-                      isLoading
-                          ? const CircularProgressIndicator()
-                          : PlayingBar(
-                              duration: durationInSeconds,
-                              onPlayPause: (bool isPlaying) {
-                                if (isPlaying) {
-                                  playAudio();
-                                } else {
-                                  pauseAudio();
-                                }
-                              },
-                              songName: songName,
-                              artistName: artistName,
-                              musicImg: songImg, // pass songImg to PlayingBar
-                            ),
+                      Consumer<CurrentPlayingSong>(
+                        builder: (context, currentSong, child) {
+                          return Visibility(
+                            visible: currentSong.isVisible,
+                            child: isLoading
+                              ? const CircularProgressIndicator()
+                              : PlayingBar(
+                                  duration: durationInSeconds,
+                                  onPlayPause: (bool isPlaying) {
+                                    if (isPlaying) {
+                                      playAudio();
+                                    } else {
+                                      pauseAudio();
+                                    }
+                                  },
+                                  artistName: currentSong.artist,
+                                  songName: currentSong.title,
+                                  musicImg: currentSong.img,
+                                ),
+                          );
+                        },
+                      ),
                       BottomNavigationBar(
                         type: BottomNavigationBarType.fixed,
                         backgroundColor: blackLowOpacity,
