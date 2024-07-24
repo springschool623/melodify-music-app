@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:melodify_app_project/components/visiblebotnavbar.dart';
+import 'package:melodify_app_project/pages/help_page.dart';
 import 'package:melodify_app_project/pages/myfavorite_page.dart';
 import 'package:melodify_app_project/pages/noti_page.dart';
 import 'package:melodify_app_project/pages/setting_page.dart';
@@ -116,6 +117,20 @@ class _PersonalPageState extends State<PersonalPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const SettingPage()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.help_outline_outlined, color: whiteColor),
+                  title: Text(
+                    'Video hướng dẫn',
+                    style: changeTextColor(robotoRegular16, whiteColor),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HelpPage()),
                     );
                   },
                 ),
