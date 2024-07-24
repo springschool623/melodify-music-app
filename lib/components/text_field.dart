@@ -7,13 +7,15 @@ import 'package:melodify_app_project/stuff/same_using.dart';
 class CustomTextField extends StatefulWidget {
   final String text;
   final String icon;
-  final TextEditingController controller; // Thêm controller
+  final TextEditingController controller;
+  final String? Function(String?)? validator; // Thêm validator
 
   const CustomTextField({
-    super.key, 
-    required this.text, 
+    super.key,
+    required this.text,
     required this.icon,
-    required this.controller, // Nhận controller
+    required this.controller,
+    this.validator, // Nhận validator
   });
 
   @override
@@ -22,15 +24,13 @@ class CustomTextField extends StatefulWidget {
 
 class CustomTextFieldState extends State<CustomTextField> {
   final FocusNode _focusNode = FocusNode();
-  bool _obscureText = true;
+  final bool _obscureText = true;
 
-  // Map để ánh xạ tên icon với các icon từ Icons
   static const Map<String, IconData> _iconMap = {
     'email': Icons.email_outlined,
     'lock': Icons.lock_outline,
     'user': Icons.person_outline,
     'birthday': Icons.cake_outlined,
-    // Thêm các ánh xạ khác nếu cần
   };
 
   @override
@@ -48,7 +48,7 @@ class CustomTextFieldState extends State<CustomTextField> {
     );
     if (selected != null) {
       setState(() {
-        widget.controller.text = "${selected.toLocal()}".split(' ')[0]; // Format date as you like
+        widget.controller.text = "${selected.toLocal()}".split(' ')[0];
       });
     }
   }
@@ -58,26 +58,27 @@ class CustomTextFieldState extends State<CustomTextField> {
     return Focus(
       focusNode: _focusNode,
       onFocusChange: (hasFocus) {
-        setState(() {}); // Trigger a rebuild when focus changes
+        setState(() {});
       },
       child: TextFormField(
         controller: widget.controller,
         obscureText: widget.icon == 'lock' ? _obscureText : false,
+        validator: widget.validator, // Áp dụng validator
         style: changeTextColor(robotoMedium18, whiteColor),
         decoration: InputDecoration(
           labelText: widget.text,
           prefixIcon: Padding(
             padding: const EdgeInsets.only(left: 20.0, right: 10),
             child: Icon(
-              _iconMap[widget.icon] ?? Icons.help_outline, // Sử dụng icon ánh xạ hoặc icon mặc định nếu không tìm thấy
+              _iconMap[widget.icon] ?? Icons.help_outline,
               size: 30,
               color: _focusNode.hasFocus ? blueColor : lightGrey,
             ),
           ),
           suffixIcon: widget.icon == 'birthday'
               ? Padding(
-                padding: const EdgeInsets.only(right: 10, left: 10),
-                child: IconButton(
+                  padding: const EdgeInsets.only(right: 10, left: 10),
+                  child: IconButton(
                     icon: Icon(
                       Icons.calendar_today,
                       color: _focusNode.hasFocus ? blueColor : lightGrey,
@@ -86,25 +87,19 @@ class CustomTextFieldState extends State<CustomTextField> {
                       _selectDate(context);
                     },
                   ),
-              )
+                )
               : null,
           labelStyle: changeTextColor(robotoMedium18, lightGrey),
           floatingLabelAlignment: FloatingLabelAlignment.start,
-          contentPadding: EdgeInsets.symmetric(
-              vertical: 15.0, horizontal: 25.0),
+          contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 25.0),
           floatingLabelStyle: changeTextColor(robotoMedium18, blueColor),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(
-                color: lightGrey, width: 1.5, style: BorderStyle.solid),
+            borderSide: BorderSide(color: lightGrey, width: 1.5, style: BorderStyle.solid),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(
-              color: blueColor,
-              width: 2.0,
-              style: BorderStyle.solid,
-            ),
+            borderSide: BorderSide(color: blueColor, width: 2.0, style: BorderStyle.solid),
           ),
         ),
       ),
