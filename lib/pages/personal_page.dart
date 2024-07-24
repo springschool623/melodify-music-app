@@ -36,7 +36,8 @@ class _PersonalPageState extends State<PersonalPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const UserAccountPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const UserAccountPage()),
                   );
                 },
                 child: Column(
@@ -113,7 +114,8 @@ class _PersonalPageState extends State<PersonalPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SettingPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const SettingPage()),
                     );
                   },
                 ),
@@ -124,16 +126,25 @@ class _PersonalPageState extends State<PersonalPage> {
                     style: changeTextColor(robotoRegular16, whiteColor),
                   ),
                   onTap: () {
-                    // Gọi phương thức logoutUser từ UserProvider
-                    Provider.of<UserProvider>(context, listen: false).logoutUser();
-                    // Cập nhật showBottomNavAndPlayingBar về false
-                    VisibilitySettings.showBottomNavAndPlayingBar.value = false;
-                    // Điều hướng về trang đăng nhập và xóa tất cả các trang trước đó
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginPage()),
-                      (route) => false,
-                    );
+                    try {
+                      // Gọi phương thức logoutUser từ UserProvider
+                      Provider.of<UserProvider>(context, listen: false)
+                          .logoutUser();
+
+                      // Cập nhật showBottomNavAndPlayingBar về false
+                      VisibilitySettings.showBottomNavAndPlayingBar.value =
+                          false;
+
+                      // Điều hướng về trang IntroPage và xóa tất cả các trang trước đó
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => const IntroPage()),
+                        (route) => false,
+                      );
+                    } catch (e, stackTrace) {
+                      print('Lỗi khi đăng xuất: $e');
+                      print('Stack trace: $stackTrace');
+                    }
                   },
                 ),
               ],
