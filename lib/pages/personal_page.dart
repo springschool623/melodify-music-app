@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:melodify_app_project/pages/myfavorite_page.dart';
+import 'package:melodify_app_project/pages/noti_page.dart';
 import 'package:melodify_app_project/pages/setting_page.dart';
 import 'package:melodify_app_project/stuff/color.dart';
+import 'package:melodify_app_project/stuff/same_using.dart';
 import 'setting_page.dart';
 import 'user_account_page.dart'; // Import trang tài khoản người dùng
 
-class PersonalPage extends StatelessWidget {
+class PersonalPage extends StatefulWidget {
   const PersonalPage({super.key});
 
+  @override
+  State<PersonalPage> createState() => _PersonalPageState();
+}
+
+class _PersonalPageState extends State<PersonalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,26 +34,18 @@ class PersonalPage extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const UserAccountPage()), // Điều hướng đến trang tài khoản người dùng
                   );
                 },
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'Lê Nguyễn Gia Bảo',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'RobotoBoldFont',
-                        color: whiteColor,
-                      ),
+                      style: changeTextColor(robotoBold16, whiteColor),
                     ),
-                    SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Text(
                       'Xem hồ sơ',
-                      style: TextStyle(
-                        fontFamily: 'RobotoBoldFont',
-                        fontSize: 14,
-                        color: lightGrayColor,
-                      ),
+                      style: changeTextColor(robotoBold14, lightGrayColor),
                     ),
                   ],
                 ),
@@ -71,45 +70,40 @@ class PersonalPage extends StatelessWidget {
               [
                 ListTile(
                   leading: const Icon(Icons.add, color: whiteColor),
-                  title: const Text(
+                  title: Text(
                     'Thêm tài khoản',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: whiteColor,
-                    ),
+                    style: changeTextColor(robotoRegular16, whiteColor),
                   ),
                   onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.flash_on, color: whiteColor),
-                  title: const Text(
+                  title: Text(
                     'Thông tin mới',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: whiteColor,
-                    ),
+                    style: changeTextColor(robotoRegular16, whiteColor),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) => NewReleasesPage(),
+                      )
+                    );
+                  },
                 ),
                 ListTile(
                   leading: const Icon(Icons.audiotrack, color: whiteColor),
-                  title: const Text(
+                  title: Text(
                     'Nội dung đã nghe',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: whiteColor,
-                    ),
+                    style: changeTextColor(robotoRegular16, whiteColor),
                   ),
                   onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings, color: whiteColor),
-                  title: const Text(
+                  title: Text(
                     'Cài đặt và quyền riêng tư',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: whiteColor,
-                    ),
+                    style: changeTextColor(robotoRegular16, whiteColor),
                   ),
                   onTap: () {
                     Navigator.push(

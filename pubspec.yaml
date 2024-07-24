@@ -55,3 +55,4 @@ flutter:
         - asset: assets/fonts/roboto/Roboto-Regular.ttf
   assets:
     - assets/images/
+    - assets/images/cateimg/

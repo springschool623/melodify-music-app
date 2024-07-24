@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
+
 class MyFavoritePage extends StatefulWidget {
   const MyFavoritePage({super.key});
 
@@ -86,7 +88,7 @@ class _MyFavoritePageState extends State<MyFavoritePage> {
     }
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -106,26 +108,23 @@ class _MyFavoritePageState extends State<MyFavoritePage> {
           CustomScrollView(
             slivers: [
               SliverPadding(
-                padding: const EdgeInsets.only(top: 10, left: 16, right: 16),
+                padding: const EdgeInsets.only(top: 10, left: 4, right: 4),
                 sliver: SliverAppBar(
-                  backgroundColor: transparent,
-                  title: Text(
-                    'Bài hát ưa thích',
-                    style: changeTextColor(robotoBold20, whiteColor)
-                  ),
-                  centerTitle: true,
-                  titleSpacing: 15,
-                  leading: IconButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back,
-                      size: 40,
-                      color: whiteColor,
-                    ),
-                  )
-                ),
+                    backgroundColor: transparent,
+                    title: Text('Bài hát ưa thích',
+                        style: changeTextColor(robotoBold20, whiteColor)),
+                    centerTitle: true,
+                    titleSpacing: 15,
+                    leading: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        size: 30,
+                        color: whiteColor,
+                      ),
+                    )),
               ),
               SliverToBoxAdapter(
                 child: Column(
@@ -135,45 +134,34 @@ class _MyFavoritePageState extends State<MyFavoritePage> {
                       height: 10,
                     ),
                     //Thanh Search
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        //Thanh Search
-                        SizedBox(
-                          width: 450,
-                          height: 40,
-                          child: SearchBar(
-                            controller: searchController,
-                            shape: MaterialStateProperty.all<OutlinedBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              lightGrayColorLowOpacity,
-                            ),
-                            elevation: MaterialStateProperty.all<double>(0),
-                            leading: Icon(
-                              Icons.search,
-                              color: lightGrayColor,
-                            ),
-                            hintText: 'Tìm trong danh sách phát',
-                            hintStyle: MaterialStateProperty.all<TextStyle>(
-                              changeTextColor(robotoRegular14, lightGrayColor)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: SizedBox(
+                        width: 300,
+                        height: 40,
+                        child: SearchBar(
+                          controller: searchController,
+                          shape: MaterialStateProperty.all<OutlinedBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
                             ),
                           ),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            lightGrayColorLowOpacity,
+                          ),
+                          elevation: MaterialStateProperty.all<double>(0),
+                          leading: Icon(
+                            Icons.search,
+                            color: lightGrayColor,
+                          ),
+                          hintText: 'Tìm trong danh sách phát',
+                          hintStyle: MaterialStateProperty.all<TextStyle>(
+                              changeTextColor(robotoRegular14, lightGrayColor)),
                         ),
-                        
-                      ],
+                      ),
                     ),
-                     
-                    //Logo cho mỗi PlayList
                     const SizedBox(
-                      height: 1,
-                    ),
-                    
-                    const SizedBox(
-                      height: 5,
+                      height: 6,
                     ),
                     const SizedBox(height: 10),
                     Padding(
@@ -185,28 +173,39 @@ class _MyFavoritePageState extends State<MyFavoritePage> {
                             '23 bài hát',
                             style: changeTextColor(robotoRegular14, whiteColor),
                           ),
-                          const SizedBox(height: 2),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.downloading_outlined,
+                              size: 30,
+                            ),
+                            color: whiteColor,
+                            onPressed: () {},
+                          ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               IconButton(
-                                icon: Icon(Icons.downloading_outlined, size: 35,),
-                                color: whiteColor,
+                                icon: FaIcon(
+                                  FontAwesomeIcons.shuffle,
+                                  size: 25,
+                                ),
+                                color: blueColor,
                                 onPressed: () {},
                               ),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    icon: Icon(Icons.shuffle, size: 35,),
-                                    color: blueColor,
-                                    onPressed: () {},
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.play_circle_fill_outlined, size: 35,),
-                                    color: blueColor,
-                                    onPressed: () {},
-                                  ),
-                                ],
+                              IconButton(
+                                icon: Icon(
+                                  Icons.play_circle_fill_outlined,
+                                  size: 45,
+                                ),
+                                color: blueColor,
+                                onPressed: () {},
                               ),
                             ],
                           ),
@@ -217,8 +216,7 @@ class _MyFavoritePageState extends State<MyFavoritePage> {
                       padding: const EdgeInsets.only(left: 8, right: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                        ],
+                        children: [],
                       ),
                     ),
                     const SizedBox(
@@ -235,8 +233,8 @@ class _MyFavoritePageState extends State<MyFavoritePage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
-                                  width: 50,
-                                  height: 50,
+                                  width: 58,
+                                  height: 58,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
@@ -253,14 +251,14 @@ class _MyFavoritePageState extends State<MyFavoritePage> {
                                     children: [
                                       Text(
                                         item['musicName']!,
-                                        style: changeTextColor(robotoBold16, whiteColor),
+                                        style: changeTextColor(
+                                            robotoBold16, whiteColor),
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                       ),
-                                      Text(
-                                        item['artist']!,
-                                        style: changeTextColor(robotoMedium14, lightGrayColor)
-                                      ),
+                                      Text(item['artist']!,
+                                          style: changeTextColor(
+                                              robotoMedium14, lightGrayColor)),
                                     ],
                                   ),
                                 ),
@@ -283,9 +281,9 @@ class _MyFavoritePageState extends State<MyFavoritePage> {
                       ),
                     ),
 
-                    
-                    const SizedBox(height: 5,),
-                    
+                    const SizedBox(
+                      height: 5,
+                    ),
 
                     const SizedBox(
                       height: 150,
