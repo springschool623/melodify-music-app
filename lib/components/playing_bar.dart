@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/components/audio_provider.dart';
+import 'package:melodify_app_project/pages/playing_page.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
+import 'package:provider/provider.dart';
 
 class PlayingBar extends StatefulWidget {
-  final int duration; // thời gian tăng chiều rộng (tính bằng giây)
+  final int duration;
   final Function(bool isPlaying) onPlayPause;
   final String songName;
-  final String artistName; // thêm tham số artistName
+  final String artistName;
   final String musicImg;
 
   const PlayingBar({
@@ -17,7 +20,7 @@ class PlayingBar extends StatefulWidget {
     required this.onPlayPause,
     required this.songName,
     required this.artistName,
-    required this.musicImg, // thêm tham số artistName
+    required this.musicImg,
   });
 
   @override
@@ -29,7 +32,7 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
   late Animation<double> _widthAnimation;
   bool _isPlaying = false;
   double _currentValue = 0;
-  late Timer _timer;
+  Timer? _timer; // Changed to Timer? for null safety
   int _elapsedSeconds = 0;
   late Color _selectedColor;
 
@@ -49,17 +52,10 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
         }
       });
 
-    // Chọn màu ngẫu nhiên cho bài nhạc
     _selectedColor = _getRandomDarkColor();
-
-    // Khởi tạo _widthAnimation với một giá trị mặc định
     _widthAnimation = Tween<double>(begin: 0, end: 0).animate(_controller);
-
-    // Initialize _timer with a dummy timer
-    _timer = Timer(Duration.zero, () {});
   }
 
-  //Update màu sắc khi bấm sang nhạc khác
   @override
   void didUpdateWidget(PlayingBar oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -78,12 +74,11 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
   void _togglePlayPause(double maxWidth) {
     setState(() {
       if (_isPlaying) {
-        _currentValue = _controller.value; // Lưu lại giá trị hiện tại
+        _currentValue = _controller.value;
         _controller.stop();
-        _timer.cancel();
+        _timer?.cancel(); // Safely cancel the timer
       } else {
         if (_currentValue == 0) {
-          // Nếu giá trị hiện tại là 0, bắt đầu lại từ đầu
           _widthAnimation = Tween<double>(begin: 0, end: maxWidth).animate(_controller)
             ..addListener(() {
               setState(() {});
@@ -91,12 +86,12 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
           _controller.forward(from: 0);
           _startTimer();
         } else {
-          _controller.forward(from: _currentValue); // Tiếp tục từ giá trị đã lưu
+          _controller.forward(from: _currentValue);
           _startTimer(resume: true);
         }
       }
       _isPlaying = !_isPlaying;
-      widget.onPlayPause(_isPlaying); // Notify the current play/pause state
+      widget.onPlayPause(_isPlaying);
     });
   }
 
@@ -108,26 +103,16 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
       setState(() {
         _elapsedSeconds++;
         if (_elapsedSeconds >= widget.duration) {
-          _timer.cancel();
+          _timer?.cancel(); // Safely cancel the timer
         }
       });
-    });
-  }
-
-  void _resetTimer() {
-    _controller.reset();
-    _timer.cancel();
-    setState(() {
-      _elapsedSeconds = 0;
-      _currentValue = 0;
-      _isPlaying = false;
     });
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    _timer.cancel();
+    _timer?.cancel(); // Safely cancel the timer
     super.dispose();
   }
 
@@ -137,10 +122,9 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
     return '$minutes:$remainingSeconds';
   }
 
-  // Hàm để tạo màu ngẫu nhiên tối hơn
   Color _getRandomDarkColor() {
     final Random random = Random();
-    const int maxColorValue = 150; // Giới hạn giá trị màu để tạo màu tối hơn
+    const int maxColorValue = 150;
     return Color.fromARGB(
       255,
       random.nextInt(maxColorValue),
@@ -151,98 +135,120 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Container(
-          height: 55,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: _selectedColor,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlayingMusicPage(
+              musicName: widget.songName,
+              artist: widget.artistName,
+              image: widget.musicImg,
+              duration: widget.duration,
+              onPlayPause: (bool isPlaying) => {
+                if (isPlaying) {
+                  context.read<AudioProvider>().resumeAudio()
+                } else {
+                  context.read<AudioProvider>().stopAudio()
+                }
+              },
+            ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            image: DecorationImage(
-                              image: NetworkImage(widget.musicImg),
+        );
+      },
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Container(
+            height: 55,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: _selectedColor,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              image: DecorationImage(
+                                image: NetworkImage(widget.musicImg),
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.songName,
-                                style: changeTextColor(robotoBlack14, whiteColor),
-                              ),
-                              Text(
-                                widget.artistName, // hiển thị tên nghệ sĩ
-                                style: changeTextColor(robotoRegular14, lightGrayColor),
-                              ),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.songName,
+                                  style: changeTextColor(robotoBlack14, whiteColor),
+                                ),
+                                Text(
+                                  widget.artistName,
+                                  style: changeTextColor(robotoRegular14, lightGrayColor),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Icon(Icons.tv, size: 30, color: lightGrayColor),
-                        const SizedBox(width: 10),
-                        const Icon(Icons.add_circle_outline_rounded, size: 30, color: lightGrayColor),
-                        const SizedBox(width: 5),
-                        GestureDetector(
-                          onTap: () {
-                            _togglePlayPause(MediaQuery.of(context).size.width - 40);
-                          },
-                          child: Icon(
-                            _isPlaying ? Icons.pause : Icons.play_arrow_rounded,
-                            size: 35,
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Icon(Icons.tv, size: 30, color: lightGrayColor),
+                          const SizedBox(width: 10),
+                          const Icon(Icons.add_circle_outline_rounded, size: 30, color: lightGrayColor),
+                          const SizedBox(width: 5),
+                          GestureDetector(
+                            onTap: () {
+                              _togglePlayPause(MediaQuery.of(context).size.width - 40);
+                            },
+                            child: Icon(
+                              _isPlaying ? Icons.pause : Icons.play_arrow_rounded,
+                              size: 35,
+                              color: whiteColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      if (_widthAnimation.value == 0) {
+                        _widthAnimation = Tween<double>(begin: 0, end: constraints.maxWidth).animate(_controller)
+                          ..addListener(() {
+                            setState(() {});
+                          });
+                      }
+                      return Stack(
+                        children: [
+                          Container(
+                            height: 2,
+                            color: whiteLowOpacity,
+                          ),
+                          Container(
+                            width: _widthAnimation.value,
+                            height: 2,
                             color: whiteColor,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    if (_widthAnimation.value == 0) {
-                      _widthAnimation = Tween<double>(begin: 0, end: constraints.maxWidth).animate(_controller)
-                        ..addListener(() {
-                          setState(() {});
-                        });
-                    }
-                    return Stack(
-                      children: [
-                        Container(
-                          height: 2,
-                          color: whiteLowOpacity,
-                        ),
-                        Container(
-                          width: _widthAnimation.value,
-                          height: 2,
-                          color: whiteColor,
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ],
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
