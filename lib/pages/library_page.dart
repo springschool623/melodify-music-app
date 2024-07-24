@@ -226,7 +226,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                                       BorderRadius.circular(50),
                                                   color: lightGrayColor),
                                             ),
-                                            Container(
+                                            SizedBox(
                                               width: 170,
                                               child: Text(
                                                 item['des1']!,

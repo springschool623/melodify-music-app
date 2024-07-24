@@ -1,9 +1,15 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:melodify_app_project/pages/artist_page.dart';
 import 'package:melodify_app_project/pages/playlist_page.dart';
+import 'package:melodify_app_project/pages/useremail_provider.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
+import 'package:provider/provider.dart';
 import 'package:spotify/spotify.dart' as spotify;
+import 'package:http/http.dart' as http;
 
 import '../conf/const.dart';
 
@@ -16,30 +22,76 @@ class ListRecentPlay extends StatefulWidget {
 
 class _ListRecentPlayState extends State<ListRecentPlay> {
   List<Map<String, String>> items = [];
+  Timer? _timer; // Để lưu trữ Timer
+  String userEmail = '';
 
   @override
   void initState() {
     super.initState();
-    fetchAlbums();
+    fetchTrackByUserEmail(userEmail);
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      fetchTrackByUserEmail(userEmail);
+    });
   }
 
-  Future<void> fetchAlbums() async {
-    final credentials = spotify.SpotifyApiCredentials(CustomString.clientId, CustomString.clientSecret);
-    final spotifyApi = spotify.SpotifyApi(credentials);
+    @override
+  void dispose() {
+    _timer?.cancel(); // Hủy Timer khi widget bị dispose
+    super.dispose();
+  }
+
+    @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final userProvider = Provider.of<UserProvider>(context);
+    setState(() {
+      userEmail = userProvider.userEmail ?? '';
+    });
+  }
+
+
+  // Future<void> fetchAlbums() async {
+  //   final credentials = spotify.SpotifyApiCredentials(CustomString.clientId, CustomString.clientSecret);
+  //   final spotifyApi = spotify.SpotifyApi(credentials);
+
+  //   try {
+  //     final newReleases = await spotifyApi.browse.newReleases().all();
+  //     setState(() {
+  //       items = newReleases.map((album) {
+  //         return {
+  //           'id': album.id!,
+  //           'image': album.images?.first.url ?? '',
+  //           'text': album.name ?? 'Unknown Album',
+  //         };
+  //       }).toList();
+  //     });
+  //   } catch (e) {
+  //     print('Error fetching albums: $e');
+  //   }
+  // }
+
+Future<void> fetchTrackByUserEmail(String email) async {
+    final url = Uri.parse('https://melodify-app-api.vercel.app/api/tracks/$email');
 
     try {
-      final newReleases = await spotifyApi.browse.newReleases().all();
-      setState(() {
-        items = newReleases.map((album) {
-          return {
-            'id': album.id!,
-            'image': album.images?.first.url ?? '',
-            'text': album.name ?? 'Unknown Album',
-          };
-        }).toList();
-      });
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> trackList = json.decode(response.body);
+        setState(() {
+          items = trackList.map((track) {
+            return {
+              'id': track['trackID'] as String,
+              'image': track['trackImage'] as String,
+              'text': track['trackName'] as String,
+            };
+          }).toList();
+        });
+      } else {
+        print('Failed to load tracks: ${response.statusCode}');
+      }
     } catch (e) {
-      print('Error fetching albums: $e');
+      print('Error fetching tracks: $e');
     }
   }
 

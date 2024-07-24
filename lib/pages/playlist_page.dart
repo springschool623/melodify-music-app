@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:melodify_app_project/components/audio_provider.dart';
 import 'package:melodify_app_project/components/track_provider.dart';
 import 'package:melodify_app_project/components/visible_playing_bar.dart';
+import 'package:melodify_app_project/pages/useremail_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:melodify_app_project/stuff/background.dart';
@@ -38,6 +40,7 @@ class PlayListPageState extends State<PlayListPage> {
   String? selectedTrackId;
   String songName = "";
   String audioUrl = "";
+  String userEmail = "";
 
   @override
   void initState() {
@@ -68,12 +71,36 @@ class PlayListPageState extends State<PlayListPage> {
     }
   }
 
+  Future<void> sendTrackToAPI(Map<String, String> trackData) async {
+  const url = 'https://melodify-app-api.vercel.app/api/tracks'; // Thay bằng URL thực của bạn
+
+  try {
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(trackData),
+    );
+
+    if (response.statusCode == 201) {
+      print('Track added successfully.');
+    } else {
+      print('Failed to add track: ${response.body}');
+    }
+  } catch (e) {
+    print('Error sending track to API: $e');
+  }
+}
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final audioProvider = Provider.of<AudioProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
     setState(() {
       audioUrl = audioProvider.audioURL ?? '';
+      userEmail = userProvider.userEmail ?? '';
     });
   }
 
@@ -244,13 +271,22 @@ class PlayListPageState extends State<PlayListPage> {
                             final trackProvider = Provider.of<TrackProvider>(context, listen: false);
                             trackProvider.setTrackId(item['trackID']);
 
-                            // Assume you have a function to fetch the audio URL for the selected track
                             final newAudioUrl = await fetchAudioUrlForTrack(item['trackID']!);
 
                             setState(() {
                               selectedTrackId = item['trackID'];
-                              audioUrl = newAudioUrl; // Update the audio URL
+                              audioUrl = newAudioUrl;
                             });
+
+                            final trackData = {
+                              'userEmail': userEmail, // Thay bằng email thực của người dùng
+                              'trackID': item['trackID']!,
+                              'trackName': item['musicName']!,
+                              'artists': item['artist']!,
+                              'trackImage': item['image']!,
+                            };
+
+                            await sendTrackToAPI(trackData);
 
                             print('Tapped on ${item['musicName']} by ${item['artist']} with trackID: ${item['trackID']}');
                             print("Play $audioUrl");

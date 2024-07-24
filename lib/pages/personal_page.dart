@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/components/visiblebotnavbar.dart';
 import 'package:melodify_app_project/pages/myfavorite_page.dart';
 import 'package:melodify_app_project/pages/noti_page.dart';
 import 'package:melodify_app_project/pages/setting_page.dart';
+import 'package:melodify_app_project/pages/sign_in_up/intro_page.dart';
+import 'package:melodify_app_project/pages/sign_in_up/login_page.dart';
+import 'package:melodify_app_project/pages/useremail_provider.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
+import 'package:provider/provider.dart';
 import 'setting_page.dart';
-import 'user_account_page.dart'; // Import trang tài khoản người dùng
+import 'user_account_page.dart';
 
 class PersonalPage extends StatefulWidget {
   const PersonalPage({super.key});
@@ -31,7 +36,7 @@ class _PersonalPageState extends State<PersonalPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const UserAccountPage()), // Điều hướng đến trang tài khoản người dùng
+                    MaterialPageRoute(builder: (context) => const UserAccountPage()),
                   );
                 },
                 child: Column(
@@ -84,10 +89,10 @@ class _PersonalPageState extends State<PersonalPage> {
                   ),
                   onTap: () {
                     Navigator.push(
-                      context, 
+                      context,
                       MaterialPageRoute(
-                        builder: (context) => NewReleasesPage(),
-                      )
+                        builder: (context) => const NewReleasesPage(),
+                      ),
                     );
                   },
                 ),
@@ -109,6 +114,25 @@ class _PersonalPageState extends State<PersonalPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const SettingPage()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.logout, color: whiteColor),
+                  title: Text(
+                    'Đăng xuất',
+                    style: changeTextColor(robotoRegular16, whiteColor),
+                  ),
+                  onTap: () {
+                    // Gọi phương thức logoutUser từ UserProvider
+                    Provider.of<UserProvider>(context, listen: false).logoutUser();
+                    // Cập nhật showBottomNavAndPlayingBar về false
+                    VisibilitySettings.showBottomNavAndPlayingBar.value = false;
+                    // Điều hướng về trang đăng nhập và xóa tất cả các trang trước đó
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                      (route) => false,
                     );
                   },
                 ),

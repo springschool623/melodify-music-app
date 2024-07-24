@@ -5,11 +5,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:melodify_app_project/components/text_field.dart';
+import 'package:melodify_app_project/components/visiblebotnavbar.dart';
 import 'package:melodify_app_project/pages/main_page.dart';
 import 'package:melodify_app_project/pages/sign_in_up/register_page.dart';
+import 'package:melodify_app_project/pages/useremail_provider.dart';
 import 'package:melodify_app_project/stuff/background.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -38,6 +41,9 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (response.statusCode == 200) {
+         // Lưu userEmail vào UserProvider
+        VisibilitySettings.showBottomNavAndPlayingBar.value = true;
+        Provider.of<UserProvider>(context, listen: false).setUserEmail(emailController.text);
         Navigator.push(
           context,
           MaterialPageRoute(
