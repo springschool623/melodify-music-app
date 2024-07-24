@@ -39,7 +39,7 @@ class IntroPageState extends State<IntroPage> {
                     ),
                   ),
                   const SizedBox(
-                    height: 50,
+                    height: 40,
                   ),
                   Text(
                     'Hàng triệu bài hát\nMiễn phí trên Melodify.',
@@ -47,7 +47,7 @@ class IntroPageState extends State<IntroPage> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: 30,
                   ),
                   //Các nút có thể đăng nhập
                   Column(
@@ -222,6 +222,17 @@ class IntroPageState extends State<IntroPage> {
                     child: Text(
                       'Đăng nhập',
                       style: changeTextColor(robotoBold16, whiteColor),
+                    ),
+                  ),
+
+                  //Link youtube
+                  Center(
+                    child: TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Video hướng dẫn',
+                        style: changeTextColor(robotoBold16, whiteColor),
+                      ),
                     ),
                   ),
                 ],
