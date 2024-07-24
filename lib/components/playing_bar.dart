@@ -183,18 +183,23 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.songName,
-                                style: changeTextColor(robotoBlack14, whiteColor),
-                              ),
-                              Text(
-                                widget.artistName, // hiển thị tên nghệ sĩ
-                                style: changeTextColor(robotoRegular14, lightGrayColor),
-                              ),
-                            ],
+                          child: Container(
+                            width: 180,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.songName,
+                                  style: changeTextColor(robotoBlack14, whiteColor),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  widget.artistName, // hiển thị tên nghệ sĩ
+                                  style: changeTextColor(robotoRegular14, lightGrayColor),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],

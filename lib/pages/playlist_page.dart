@@ -6,6 +6,7 @@ import 'package:melodify_app_project/components/audio_provider.dart';
 import 'package:melodify_app_project/components/track_provider.dart';
 import 'package:melodify_app_project/components/visible_playing_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:melodify_app_project/stuff/background.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
@@ -110,7 +111,7 @@ class PlayListPageState extends State<PlayListPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: 300,
+                            width: 285,
                             height: 40,
                             child: SearchBar(
                               controller: searchController,
@@ -138,7 +139,7 @@ class PlayListPageState extends State<PlayListPage> {
                           ),
                           Container(
                             height: 40,
-                            width: 70,
+                            width: 65,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 color: lightGrayColorLowOpacity,
@@ -191,7 +192,11 @@ class PlayListPageState extends State<PlayListPage> {
                           ),
                           Row(
                             children: [
-                              Icon(Icons.shuffle, color: blueColor, size: 30,),
+                              FaIcon(
+                                FontAwesomeIcons.shuffle, 
+                                color: blueColor, 
+                                size: 25,
+                              ),
                               SizedBox(width: 10),
                               Icon(Icons.play_circle, color: blueColor, size: 50,),
                             ],

@@ -22,6 +22,7 @@ class CustomTextField extends StatefulWidget {
 
 class CustomTextFieldState extends State<CustomTextField> {
   final FocusNode _focusNode = FocusNode();
+  bool _obscureText = true;
 
   // Map để ánh xạ tên icon với các icon từ Icons
   static const Map<String, IconData> _iconMap = {
@@ -61,6 +62,7 @@ class CustomTextFieldState extends State<CustomTextField> {
       },
       child: TextFormField(
         controller: widget.controller,
+        obscureText: widget.icon == 'lock' ? _obscureText : false,
         style: changeTextColor(robotoMedium18, whiteColor),
         decoration: InputDecoration(
           labelText: widget.text,

@@ -73,204 +73,209 @@ class _LoginPageState extends State<LoginPage> {
       body: Stack(
         children: [
           buildBackgroundContainer(),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Logo
-                Container(
-                  height: 150,
-                  width: 150,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/logo.png'),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 35,
-                ),
-                Text(
-                  'Đăng nhập',
-                  style: changeTextColor(robotoBold30, whiteColor),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Column(
-                  children: [
-                    // Nhập Email
-                    CustomTextField(
-                      controller: emailController,
-                      text: 'Email',
-                      icon: 'email',
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    // Nhập Mật khẩu
-                    CustomTextField(
-                      controller: passwordController,
-                      text: 'Mật khẩu',
-                      icon: 'lock',
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 5,),
-                // Nút quên mật khẩu
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Checkbox(
-                      value: _isForgetPass,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _isForgetPass = value ?? false;
-                        });
-                      },
-                      activeColor: Colors.blue, // Màu sắc của checkbox khi được chọn
-                      checkColor: Colors.white, // Màu sắc của dấu kiểm
-                      side: BorderSide(
-                        color: Colors.blue, // Màu viền của checkbox
-                        width: 2.0, // Độ dày của viền
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                    ),
-                    Text(
-                      'Nhớ mật khẩu',
-                      style: changeTextColor(robotoMedium14, lightGrey),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 5,),
-                ElevatedButton(
-                  onPressed: loginUser,
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size(500, 50),
-                    backgroundColor: blueColor,
-                  ),
-                  child: Text(
-                    'Đăng nhập',
-                    style: changeTextColor(robotoMedium18, whiteColor),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginPage(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Quên mật khẩu?',
-                    style: changeTextColor(robotoBold16, whiteColor),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        color: Colors.white, // Màu của đường kẻ
-                        thickness: 1, // Độ dày của đường kẻ
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        'Hoặc',
-                        style: changeTextColor(robotoMedium16, whiteColor),
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: Colors.white, // Màu của đường kẻ
-                        thickness: 1, // Độ dày của đường kẻ
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20,),
-                // Option đăng nhập khác
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: 50,
-                        width: 50,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: blackColor,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: lightGrey, width: 1),
-                        ),
-                        child: Image.asset(
-                          'assets/images/google_icon.png',
-                        ),
-                      ),
-                      Container(
-                        height: 50,
-                        width: 50,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: blackColor,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: lightGrey, width: 1),
-                        ),
-                        child: Image.asset(
-                          'assets/images/fb_icon.png',
-                        ),
-                      ),
-                      Container(
-                        height: 50,
-                        width: 50,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: blackColor,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: lightGrey, width: 1),
-                        ),
-                        child: Image.asset(
-                          'assets/images/mphone_icon.png',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 5,),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+          Center(
+            child: SingleChildScrollView(
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                width: double.infinity,
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Logo
+                    Container(
+                      height: 150,
+                      width: 150,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/logo.png'),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 35,
+                    ),
                     Text(
-                      'Không có tài khoản?',
-                      style: changeTextColor(robotoRegular16, whiteColor),
+                      'Đăng nhập',
+                      style: changeTextColor(robotoBold30, whiteColor),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Column(
+                      children: [
+                        // Nhập Email
+                        CustomTextField(
+                          controller: emailController,
+                          text: 'Email',
+                          icon: 'email',
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        // Nhập Mật khẩu
+                        CustomTextField(
+                          controller: passwordController,
+                          text: 'Mật khẩu',
+                          icon: 'lock',
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5,),
+                    // Nút quên mật khẩu
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Checkbox(
+                          value: _isForgetPass,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _isForgetPass = value ?? false;
+                            });
+                          },
+                          activeColor: Colors.blue, // Màu sắc của checkbox khi được chọn
+                          checkColor: Colors.white, // Màu sắc của dấu kiểm
+                          side: BorderSide(
+                            color: Colors.blue, // Màu viền của checkbox
+                            width: 2.0, // Độ dày của viền
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                        ),
+                        Text(
+                          'Nhớ mật khẩu',
+                          style: changeTextColor(robotoMedium14, lightGrey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5,),
+                    ElevatedButton(
+                      onPressed: loginUser,
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size(500, 50),
+                        backgroundColor: blueColor,
+                      ),
+                      child: Text(
+                        'Đăng nhập',
+                        style: changeTextColor(robotoMedium18, whiteColor),
+                      ),
                     ),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RegisterPage(),
+                            builder: (context) => LoginPage(),
                           ),
                         );
                       },
                       child: Text(
-                        'Đăng ký',
-                        style: changeTextColor(robotoBold18, blueColor),
+                        'Quên mật khẩu?',
+                        style: changeTextColor(robotoBold16, whiteColor),
                       ),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white, // Màu của đường kẻ
+                            thickness: 1, // Độ dày của đường kẻ
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            'Hoặc',
+                            style: changeTextColor(robotoMedium16, whiteColor),
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white, // Màu của đường kẻ
+                            thickness: 1, // Độ dày của đường kẻ
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20,),
+                    // Option đăng nhập khác
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 50,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: blackColor,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: lightGrey, width: 1),
+                            ),
+                            child: Image.asset(
+                              'assets/images/google_icon.png',
+                            ),
+                          ),
+                          Container(
+                            height: 50,
+                            width: 50,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: blackColor,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: lightGrey, width: 1),
+                            ),
+                            child: Image.asset(
+                              'assets/images/fb_icon.png',
+                            ),
+                          ),
+                          Container(
+                            height: 50,
+                            width: 50,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: blackColor,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: lightGrey, width: 1),
+                            ),
+                            child: Image.asset(
+                              'assets/images/mphone_icon.png',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 5,),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Không có tài khoản?',
+                          style: changeTextColor(robotoRegular16, whiteColor),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegisterPage(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Đăng ký',
+                            style: changeTextColor(robotoBold18, blueColor),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ],
