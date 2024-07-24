@@ -38,13 +38,53 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
       if (response.statusCode == 201) {
-        // If the server did return a 201 CREATED response,
-        // then navigate to the CreateUser page.
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => const LoginPage(),
           ),
+        );
+      } else if (response.statusCode == 400) {
+        // If the server returned a 400 CONFLICT response, email already exists.
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              title: Row(
+                children: [
+                  Icon(Icons.error, color: Colors.red),
+                  SizedBox(width: 10),
+                  Text(
+                    'Email đã tồn tại',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+              content: Text(
+                'Vui lòng sử dụng một email khác!',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              actions: [
+                TextButton(
+                  child: Text(
+                    'OK',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
         );
       } else {
         showDialog(
