@@ -31,6 +31,12 @@ class AudioProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> resumeAudio() async {
+    await _player.resume();
+    print(audioURL);
+    notifyListeners();
+  }
+
   void setAudioURL(String url) {
     _audioURL = url;
     notifyListeners();
