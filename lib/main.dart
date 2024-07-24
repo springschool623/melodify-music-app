@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:melodify_app_project/components/audio_provider.dart';
+import 'package:melodify_app_project/components/track_provider.dart';
 import 'package:melodify_app_project/components/visible_playing_bar.dart';
 import 'package:melodify_app_project/pages/main_page.dart';
 import 'package:melodify_app_project/pages/sign_in_up/intro_page.dart';
@@ -10,6 +12,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CurrentPlayingSong()),
+        ChangeNotifierProvider(create: (_) => TrackProvider()),
+        ChangeNotifierProvider(create: (_) => AudioProvider()),
       ],
       child: const MainApp(),
     ),

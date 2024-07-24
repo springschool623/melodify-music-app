@@ -3,6 +3,9 @@ import 'package:melodify_app_project/pages/artist_page.dart';
 import 'package:melodify_app_project/pages/playlist_page.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
+import 'package:spotify/spotify.dart' as spotify;
+
+import '../conf/const.dart';
 
 class ListRecentPlay extends StatefulWidget {
   const ListRecentPlay({super.key});
@@ -12,30 +15,49 @@ class ListRecentPlay extends StatefulWidget {
 }
 
 class _ListRecentPlayState extends State<ListRecentPlay> {
+  List<Map<String, String>> items = [];
 
-  final List<Map<String, String>> items = [
-    {'image': 'assets/images/playlist1.png', 'text': 'Negav Radio'},
-    {'image': 'assets/images/artist2.png', 'text': 'Negav'},
-    {'image': 'assets/images/artist4.png', 'text': 'W/N'},
-    {'image': 'assets/images/playlist4.png', 'text': 'Daily Mix 4'},
-    {'image': 'assets/images/playlist5.png', 'text': 'Daily Mix 5'},
-  ];
+  @override
+  void initState() {
+    super.initState();
+    fetchAlbums();
+  }
+
+  Future<void> fetchAlbums() async {
+    final credentials = spotify.SpotifyApiCredentials(CustomString.clientId, CustomString.clientSecret);
+    final spotifyApi = spotify.SpotifyApi(credentials);
+
+    try {
+      final newReleases = await spotifyApi.browse.newReleases().all();
+      setState(() {
+        items = newReleases.map((album) {
+          return {
+            'id': album.id!,
+            'image': album.images?.first.url ?? '',
+            'text': album.name ?? 'Unknown Album',
+          };
+        }).toList();
+      });
+    } catch (e) {
+      print('Error fetching albums: $e');
+    }
+  }
 
   //Navigate sang các trang khác 
-  void _navigateToAnotherPage(String image, String text, String imageURL) {
-    if(image.contains('playlist')) {
+  void _navigateToAnotherPage(String albumId, String image, String text, String imageURL) {
+    if (image.contains('playlist')) {
       Navigator.push(
-        context, 
+        context,
         MaterialPageRoute(
-          builder: (context) => PlayListPage(title: text, imagePlaylist: imageURL,),
+          builder: (context) => PlayListPage(title: text, imagePlaylist: imageURL, albumId: albumId),
         ),
       );
     } else {
       Navigator.push(
-        context, 
+        context,
         MaterialPageRoute(
-          builder: (context) => ArtistPage(artistName: text, artistImage: imageURL,),
-        )
+          builder: (context) => ArtistPage(artistName: text, artistImage: imageURL),
+        ),
       );
     }
   }
@@ -51,7 +73,7 @@ class _ListRecentPlayState extends State<ListRecentPlay> {
           final item = items[index];
           final isPlaylist = item['image']!.contains('playlist');
           return GestureDetector(
-            onTap: () => _navigateToAnotherPage(item['image']!, item['text']!, item['image']!),
+            onTap: () => _navigateToAnotherPage(item['id']!, item['image']!, item['text']!, item['image']!),
             child: Container(
               margin: const EdgeInsets.only(right: 15),
               child: Column(
@@ -65,7 +87,7 @@ class _ListRecentPlayState extends State<ListRecentPlay> {
                       shape: isPlaylist ? BoxShape.rectangle : BoxShape.circle,
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage(item['image']!),
+                        image: NetworkImage(item['image']!),
                       ),
                     ),
                   ),
@@ -74,8 +96,10 @@ class _ListRecentPlayState extends State<ListRecentPlay> {
                     width: 125,
                     alignment: isPlaylist ? Alignment.centerLeft : Alignment.center,
                     child: Text(
-                      items[index]['text']!,
+                      item['text']!,
                       style: changeTextColor(robotoBold13, whiteColor),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       textAlign: isPlaylist ? TextAlign.left : TextAlign.center,
                     ),
                   ),

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:melodify_app_project/components/text_field.dart';
 import 'package:melodify_app_project/pages/sign_in_up/create_user.dart';
@@ -7,6 +5,8 @@ import 'package:melodify_app_project/pages/sign_in_up/login_page.dart';
 import 'package:melodify_app_project/stuff/background.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -16,6 +16,39 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
+
+  Future<void> registerUser() async {
+    final response = await http.post(
+      Uri.parse('https://melodify-app-api.vercel.app/api/users'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': emailController.text,
+        'password': passwordController.text,
+        'dob': dobController.text,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      // If the server did return a 201 CREATED response,
+      // then navigate to the CreateUser page.
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const CreateUser(),
+        ),
+      );
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to create user.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,29 +83,34 @@ class _RegisterPageState extends State<RegisterPage> {
                 Column(
                   children: [
                     //Nhập Email
-                    CustomTextField(text: 'Email', icon: 'email'),
+                    CustomTextField(
+                      controller: emailController,
+                      text: 'Email',
+                      icon: 'email'
+                    ),
                     const SizedBox(
                       height: 25,
                     ),
                     //Nhập Mật khẩu
-                    CustomTextField(text: 'Mật khẩu', icon: 'lock'),
+                    CustomTextField(
+                      controller: passwordController,
+                      text: 'Mật khẩu',
+                      icon: 'lock'
+                    ),
                     const SizedBox(height: 25,),
                     //Nhập ngày sinh
-                    CustomTextField(text: 'Ngày sinh', icon: 'birthday'),
+                    CustomTextField(
+                      controller: dobController,
+                      text: 'Ngày sinh',
+                      icon: 'birthday'
+                    ),
                   ],
                 ),
                 const SizedBox(height: 25,),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CreateUser(),
-                      )
-                    );
-                  }, 
+                  onPressed: registerUser, 
                   style: ElevatedButton.styleFrom(
-                    fixedSize: Size(500, 50),
+                    fixedSize: const Size(500, 50),
                     backgroundColor: blueColor
                   ),
                   child: Text(
@@ -82,28 +120,28 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 20,),
                 Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: Colors.white, // Màu của đường kẻ
-                          thickness: 1, // Độ dày của đường kẻ
-                        ),
+                  children: [
+                    const Expanded(
+                      child: Divider(
+                        color: Colors.white, // Màu của đường kẻ
+                        thickness: 1, // Độ dày của đường kẻ
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          'Hoặc',
-                          style: changeTextColor(robotoMedium16, whiteColor),
-                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        'Hoặc',
+                        style: changeTextColor(robotoMedium16, whiteColor),
                       ),
-                      Expanded(
-                        child: Divider(
-                          color: Colors.white, // Màu của đường kẻ
-                          thickness: 1, // Độ dày của đường kẻ
-                        ),
+                    ),
+                    const Expanded(
+                      child: Divider(
+                        color: Colors.white, // Màu của đường kẻ
+                        thickness: 1, // Độ dày của đường kẻ
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 20,),
                 //Option đăng nhập khác
                 Padding(
@@ -164,19 +202,19 @@ class _RegisterPageState extends State<RegisterPage> {
                       style: changeTextColor(robotoRegular16, whiteColor),
                     ),
                     TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context, 
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        )
-                      );
-                    }, 
-                    child: Text(
-                      'Đăng nhập',
-                      style: changeTextColor(robotoBold18, blueColor),
+                      onPressed: () {
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          )
+                        );
+                      }, 
+                      child: Text(
+                        'Đăng nhập',
+                        style: changeTextColor(robotoBold18, blueColor),
+                      ),
                     ),
-                  ),
                   ],
                 )
               ],

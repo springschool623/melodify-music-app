@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 
 const Color color = whiteColor;
+const Color lightGray = lightGrayColor;
 
 //ROBOTO BOLD FONT
 TextStyle robotoBold24 = TextStyle(

@@ -17,7 +17,7 @@ class PlayingBar extends StatefulWidget {
     required this.onPlayPause,
     required this.songName,
     required this.artistName,
-    required this.musicImg // thêm tham số artistName
+    required this.musicImg, // thêm tham số artistName
   });
 
   @override
@@ -52,12 +52,13 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
     // Chọn màu ngẫu nhiên cho bài nhạc
     _selectedColor = _getRandomDarkColor();
 
-
     // Khởi tạo _widthAnimation với một giá trị mặc định
     _widthAnimation = Tween<double>(begin: 0, end: 0).animate(_controller);
+
+    // Initialize _timer with a dummy timer
+    _timer = Timer(Duration.zero, () {});
   }
 
-  
   //Update màu sắc khi bấm sang nhạc khác
   @override
   void didUpdateWidget(PlayingBar oldWidget) {
@@ -68,7 +69,6 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
       setState(() {
         _selectedColor = _getRandomDarkColor();
         _controller.reset();
-        _widthAnimation = Tween<double>(begin: 0, end: MediaQuery.of(context).size.width - 40).animate(_controller);
         _isPlaying = false;
         _currentValue = 0;
       });
@@ -131,6 +131,12 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
     super.dispose();
   }
 
+  String _formatDuration(int seconds) {
+    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+    final remainingSeconds = (seconds % 60).toString().padLeft(2, '0');
+    return '$minutes:$remainingSeconds';
+  }
+
   // Hàm để tạo màu ngẫu nhiên tối hơn
   Color _getRandomDarkColor() {
     final Random random = Random();
@@ -141,12 +147,6 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
       random.nextInt(maxColorValue),
       random.nextInt(maxColorValue),
     );
-  }
-
-  String _formatDuration(int seconds) {
-    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
-    final remainingSeconds = (seconds % 60).toString().padLeft(2, '0');
-    return '$minutes:$remainingSeconds';
   }
 
   @override
@@ -177,7 +177,7 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             image: DecorationImage(
-                              image: NetworkImage(widget.musicImg)
+                              image: NetworkImage(widget.musicImg),
                             ),
                           ),
                         ),
@@ -221,6 +221,12 @@ class _PlayingBarState extends State<PlayingBar> with SingleTickerProviderStateM
                 ),
                 LayoutBuilder(
                   builder: (context, constraints) {
+                    if (_widthAnimation.value == 0) {
+                      _widthAnimation = Tween<double>(begin: 0, end: constraints.maxWidth).animate(_controller)
+                        ..addListener(() {
+                          setState(() {});
+                        });
+                    }
                     return Stack(
                       children: [
                         Container(

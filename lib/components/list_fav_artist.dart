@@ -29,11 +29,12 @@ class _ListFavoriteArtistState extends State<ListFavoriteArtist> {
           return GestureDetector(
             onTap: () {
               Navigator.push(
-                context, 
-                MaterialPageRoute(
-                  builder: (context) => ArtistPage(artistName: items[index]['text']!, artistImage: items[index]['image']!),
-                )
-              );
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ArtistPage(
+                        artistName: items[index]['text']!,
+                        artistImage: items[index]['image']!),
+                  ));
             },
             child: Container(
               margin: const EdgeInsets.only(right: 15),
@@ -56,6 +57,8 @@ class _ListFavoriteArtistState extends State<ListFavoriteArtist> {
                   Text(
                     items[index]['text']!,
                     style: changeTextColor(robotoBold14, whiteColor),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                   ),
                 ],
