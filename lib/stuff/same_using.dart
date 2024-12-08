@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 
 const Color color = whiteColor;
+const Color lightGray = lightGrayColor;
 
 //ROBOTO BOLD FONT
 TextStyle robotoBold24 = TextStyle(
@@ -46,9 +47,33 @@ TextStyle robotoBold12 = TextStyle(
   fontSize: 12,
   color: color,
 );
-
+TextStyle robotoBold38 = TextStyle(
+  fontFamily: 'RobotoBoldFont',
+  fontSize: 38,
+  color: color,
+);
+TextStyle robotoBold30 = TextStyle(
+  fontFamily: 'RobotoBoldFont',
+  fontSize: 30,
+  color: color,
+);
+TextStyle robotoBold28 = TextStyle(
+  fontFamily: 'RobotoBoldFont',
+  fontSize: 28,
+  color: color,
+);
+TextStyle robotoBold26 = TextStyle(
+  fontFamily: 'RobotoBoldFont',
+  fontSize: 26,
+  color: color,
+);
 
 //ROBOTO REGULAR FONT
+TextStyle robotoRegular38 = TextStyle(
+  fontFamily: 'RobotoRegularFont',
+  fontSize: 38,
+  color: color,
+);
 TextStyle robotoRegular24 = TextStyle(
   fontFamily: 'RobotoRegularFont',
   fontSize: 24,
@@ -92,6 +117,12 @@ TextStyle robotoRegular10 = TextStyle(
 
 
 //ROBOTO BLACK FONT
+TextStyle robotoBlack30 = TextStyle(
+  fontFamily: 'RobotoBlackFont',
+  fontSize: 36,
+  color: color,
+  fontWeight: FontWeight.bold
+);
 TextStyle robotoBlack24 = TextStyle(
   fontFamily: 'RobotoBlackFont',
   fontSize: 24,
@@ -127,7 +158,16 @@ TextStyle robotoBlack12 = TextStyle(
   fontSize: 12,
   color: color,
 );
-
+TextStyle robotoBlack26 = TextStyle(
+  fontFamily: 'RobotoBlackFont',
+  fontSize: 26,
+  color: color,
+);
+TextStyle robotoBlack28 = TextStyle(
+  fontFamily: 'RobotoBlackFont',
+  fontSize: 28,
+  color: color,
+);
 
 //ROBOTO MEDIUM FONT
 TextStyle robotoMedium24 = TextStyle(

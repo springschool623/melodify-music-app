@@ -40,3 +40,20 @@ Container blueBackground() {
     ),
   );
 }
+
+Container moreBlackBackground() {
+  return Container(
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          blueColor,
+          blackColor,
+          blackColor,
+        ],
+        stops: [0.0, 0.7, 1.0]
+      ),
+    ),
+  );
+}

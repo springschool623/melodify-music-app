@@ -4,26 +4,29 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:melodify_app_project/components/audio_provider.dart';
 import 'package:melodify_app_project/components/visiblebotnavbar.dart';
+import 'package:melodify_app_project/pages/artist_page.dart';
 import 'package:melodify_app_project/pages/lyrics_page.dart';
 import 'package:melodify_app_project/stuff/background.dart';
 import 'package:melodify_app_project/stuff/color.dart';
 import 'package:melodify_app_project/stuff/same_using.dart';
+import 'package:provider/provider.dart';
 
 class PlayingMusicPage extends StatefulWidget {
   final String musicName;
   final String artist;
   final String image;
-  final String playListTitle;
   final int duration;
+  final Function(bool isPlaying) onPlayPause;
 
   const PlayingMusicPage({
     Key? key,
     required this.musicName,
     required this.artist,
     required this.image,
-    required this.playListTitle,
     required this.duration,
+    required this.onPlayPause,
   }) : super(key: key);
 
   static const String routeName = '/playing_music_page';
@@ -34,11 +37,11 @@ class PlayingMusicPage extends StatefulWidget {
 
 class _PlayingMusicPageState extends State<PlayingMusicPage>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+late AnimationController _controller;
   late Animation<double> _widthAnimation;
   bool _isPlaying = false;
   double _currentValue = 0;
-  late Timer _timer;
+  Timer? _timer;
   int _elapsedSeconds = 0;
 
   bool _isDisposed = false;
@@ -57,7 +60,7 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
     //     VisibilitySettings.showBottomNavAndPlayingBar.value = false;
     //   }
     // });
-    // _someValueNotifier.addListener(_listener);
+    _someValueNotifier.addListener(_listener);
 
     //Just for playing bar
     _controller = AnimationController(
@@ -67,26 +70,26 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
         if (status == AnimationStatus.completed) {
           setState(() {
             _isPlaying = false;
+            _timer?.cancel();
           });
         }
       });
 
-    //Khởi tạo _widthAnimation với một giá trị mặc định
+    // Initialize _widthAnimation with a default value
     _widthAnimation = Tween<double>(begin: 0, end: 0).animate(_controller);
-
-    _startTimer();
   }
 
   void _togglePlayPause(double maxWidth) {
     if (mounted) {
       setState(() {
         if (_isPlaying) {
-          _currentValue = _controller.value; //Lưu lại giá trị hiện tại
+          _currentValue = _controller.value; // Save the current value
           _controller.stop();
-          _timer.cancel();
+          _timer?.cancel();
+          context.read<AudioProvider>().stopAudio();
         } else {
           if (_currentValue == 0) {
-            //Nếu giá trị hiện tại là 0, bắt đầu lại từ đầu
+            // If current value is 0, start from the beginning
             _widthAnimation =
                 Tween<double>(begin: 0, end: maxWidth).animate(_controller)
                   ..addListener(() {
@@ -95,13 +98,14 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
                     }
                   });
             _controller.forward(from: 0);
-            _startTimer();
           } else {
             _controller.forward(from: _currentValue);
-            _startTimer(resume: true);
           }
+          _startTimer(resume: _currentValue != 0);
+          context.read<AudioProvider>().resumeAudio();
         }
         _isPlaying = !_isPlaying;
+        widget.onPlayPause(_isPlaying);
       });
     }
   }
@@ -115,7 +119,7 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
         setState(() {
           _elapsedSeconds++;
           if (_elapsedSeconds >= widget.duration) {
-            _timer.cancel();
+            _timer?.cancel();
           }
         });
       }
@@ -124,7 +128,7 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
 
   void _resetTimer() {
     _controller.reset();
-    _timer.cancel();
+    _timer?.cancel();
     setState(() {
       _elapsedSeconds = 0;
       _currentValue = 0;
@@ -135,14 +139,14 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
   @override
   void dispose() {
     if (!_isDisposed) {
-      // Hiển thị BottomNav và PlayingBar khi rời khỏi trang này
+      // Show BottomNav and PlayingBar when leaving this page
       // VisibilitySettings.showBottomNavAndPlayingBar.value = true;
-      // _someValueNotifier.removeListener(_listener);
-      // _someValueNotifier.dispose();
+      _someValueNotifier.removeListener(_listener);
+      _someValueNotifier.dispose();
 
       _controller.dispose();
-      _timer.cancel();
-      _isDisposed = true; // Đánh dấu đã dispose
+      _timer?.cancel();
+      _isDisposed = true; // Mark as disposed
 
       super.dispose();
     }
@@ -186,10 +190,10 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
                       const SizedBox(
                         height: 3,
                       ),
-                      Text(
-                        widget.playListTitle,
-                        style: changeTextColor(robotoBlack12, whiteColor),
-                      ),
+                      // Text(
+                      //   "Không có",
+                      //   style: changeTextColor(robotoBlack12, whiteColor),
+                      // ),
                     ],
                   ),
                   centerTitle: true,
@@ -233,7 +237,7 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   image: DecorationImage(
-                                      image: AssetImage(widget.image),
+                                      image: NetworkImage(widget.image),
                                       fit: BoxFit.cover)),
                             ),
                           ),
@@ -305,12 +309,12 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '00:00',
+                                    _formatDuration(_elapsedSeconds),
                                     style: changeTextColor(
                                         robotoMedium14, lightGrayColor),
                                   ),
                                   Text(
-                                    '04:10',
+                                    _formatDuration(widget.duration),
                                     style: changeTextColor(
                                         robotoMedium14, lightGrayColor),
                                   )
@@ -503,77 +507,87 @@ class _PlayingMusicPageState extends State<PlayingMusicPage>
                     const SizedBox(
                       height: 10,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 36),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: darkGray,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 220,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: const DecorationImage(
-                                      fit: BoxFit.fitHeight,
-                                      image: AssetImage(
-                                        'assets/images/bannerartist.png',
-                                      ))),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Negav',
-                                            style: changeTextColor(
-                                                robotoBold20, whiteColor),
-                                          ),
-                                          Text(
-                                            '513.1N người nghe hằng tiếng',
-                                            style: changeTextColor(
-                                                robotoRegular12,
-                                                lightGrayColor),
-                                          ),
-                                        ],
-                                      ),
-                                      OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            minimumSize: const Size(60, 25),
-                                          ),
-                                          onPressed: () {},
-                                          child: Text(
-                                            'Theo dõi',
-                                            style: changeTextColor(
-                                                robotoBlack12, whiteColor),
-                                          )),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    'sap noi tieng',
-                                    style: changeTextColor(
-                                        robotoMedium12, lightGrayColor),
-                                  ),
-                                ],
-                              ),
+                    GestureDetector(
+                      onTap: () {
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: (context) => const ArtistPage(artistName: 'Negav', artistImage: "h",),
                             )
-                          ],
+                          );
+                        },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 36),
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: darkGray,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 220,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: const DecorationImage(
+                                        fit: BoxFit.fitHeight,
+                                        image: AssetImage(
+                                          'assets/images/bannerartist.png',
+                                        ))),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Negav',
+                                              style: changeTextColor(
+                                                  robotoBold20, whiteColor),
+                                            ),
+                                            Text(
+                                              '513.1N người nghe hằng tiếng',
+                                              style: changeTextColor(
+                                                  robotoRegular12,
+                                                  lightGrayColor),
+                                            ),
+                                          ],
+                                        ),
+                                        OutlinedButton(
+                                            style: OutlinedButton.styleFrom(
+                                              minimumSize: const Size(60, 25),
+                                            ),
+                                            onPressed: () {},
+                                            child: Text(
+                                              'Theo dõi',
+                                              style: changeTextColor(
+                                                  robotoBlack12, whiteColor),
+                                            )),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      'sap noi tieng',
+                                      style: changeTextColor(
+                                          robotoMedium12, lightGrayColor),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
